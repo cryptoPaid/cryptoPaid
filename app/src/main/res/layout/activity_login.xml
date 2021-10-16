@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity">
+
+    <EditText
+        android:id="@+id/Login_EDT_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Username"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp"
+        />
+
+    <EditText
+        android:id="@+id/Login_EDT_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/Login_EDT_username"
+        android:layout_marginTop="25dp"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/Login_BTN_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:layout_below="@id/Login_EDT_password"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:tag="login"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/Login_BTN_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        android:layout_below="@id/Login_BTN_login"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:tag="register"
+        />
+
+    <TextView
+        android:id="@+id/Login_LBL_forgotPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="forgot your password?"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="150dp"
+        android:layout_marginLeft="50dp"
+        android:clickable="true"
+        android:tag="forgotPass"
+    />
+
+</RelativeLayout>

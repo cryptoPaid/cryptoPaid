@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Fintech">fintech</string>
+    <string name="email">Email</string>
+    <string name="last_name">Last Name</string>
+    <string name="first_name">First Name</string>
+    <string name="username">username</string>
+    <string name="back_to_settings">BACK TO SETTINGS</string>
+</resources>
