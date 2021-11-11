@@ -16,7 +16,7 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven { url "https://minter.jfrog.io/artifactory/android/" }
+        //maven { url "https://minter.jfrog.io/artifactory/android/" }
     }
 }
 
