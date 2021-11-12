@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import network.minter.blockchain.models.operational.Transaction;
-
 public class CreateActivity extends AppCompatActivity {
 
     @Override

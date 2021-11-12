@@ -9,8 +9,6 @@ import android.widget.RelativeLayout;
 
 import java.math.BigInteger;
 
-import network.minter.blockchain.models.operational.BlockchainID;
-import network.minter.blockchain.models.operational.Transaction;
 
 public class MainActivity extends AppCompatActivity {
 
