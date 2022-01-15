@@ -49,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
 //            Intent intent = new Intent(this, RegisterActivity.class);
 //            this.startActivity(intent);
             }else if ((view.getTag().toString().equals("waiting"))) {
-//            Intent intent = new Intent(this, RegisterActivity.class);
-//            this.startActivity(intent);
+            Intent intent = new Intent(MainActivity.this, TranswaitActivity.class);
+            startActivity(intent);
             }else if ((view.getTag().toString().equals("input4"))) {
 //            Intent intent = new Intent(this, RegisterActivity.class);
 //            this.startActivity(intent);

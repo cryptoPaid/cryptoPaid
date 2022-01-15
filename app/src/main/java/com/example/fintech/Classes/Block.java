@@ -62,7 +62,8 @@ public class Block {
     public void setPreviousHash(String previousHash) {
         this.previousHash = previousHash;
     }
-        
+
+
         
     public static String calculateHash(Block block) {
         MessageDigest digest=null;
