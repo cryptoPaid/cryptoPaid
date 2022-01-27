@@ -22,6 +22,7 @@ import com.example.fintech.Classes.Block;
 import com.example.fintech.Classes.BlockChain;
 import com.example.fintech.Classes.Transaction;
 import com.example.fintech.Classes.User;
+import com.example.fintech.Classes.UserId;
 import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONException;
@@ -167,10 +168,10 @@ public class TransactionActivity extends AppCompatActivity {
     //////////// TEST FOR USER API ///////////////
     private void postRequest() {
         User user = new User("stas.krot1996@gmail.com", "MANAGER", "Demo User","451451dvd");
-
-        String url = "http://192.168.137.1:8050/blockchain/users";
+        UserId userId = new UserId("2021b.johny.stas","stas.krot1996@gmail.com");
+        String url = "http://192.168.137.1:8050/blockchain/users/";
         JSONObject js = new JSONObject();
-//        JSONObject itemJs = new JSONObject();
+        JSONObject itemJs = new JSONObject();
 //        JSONObject createdJs = new JSONObject();
 //        JSONObject userIdJs = new JSONObject();
 //        JSONObject userDetailIdJs = new JSONObject();
@@ -180,12 +181,15 @@ public class TransactionActivity extends AppCompatActivity {
         try {
 //            itemJs.put("space","");
 //            itemJs.put("id","");
+            itemJs.put("space", userId.getSpace());
+            itemJs.put("email" , userId.getSpace());
+
+            js.put("userId", itemJs);
             js.put("email", user.getEmail());
             js.put("role",user.getRole());
             js.put("username",user.getUsername());
             js.put("password",user.getPassword());
-
-
+            Log.d("stas", js.toString() );
 //            js.put("type","parkingLot");
 //            js.put("name",park.getName());
 //            js.put("active",park.getActive());
