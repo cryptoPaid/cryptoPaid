@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.2111111111111111" />
         <entry key="../cryptoPaid/app/src/main/res/layout/activity_login.xml" value="0.27760416666666665" />
         <entry key="../cryptoPaid/app/src/main/res/layout/activity_main.xml" value="0.27760416666666665" />
         <entry key="../cryptoPaid/app/src/main/res/layout/activity_personal.xml" value="0.27760416666666665" />

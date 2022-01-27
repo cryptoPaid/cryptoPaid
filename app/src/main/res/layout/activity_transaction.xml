@@ -55,13 +55,13 @@
         android:id="@+id/transaction_BTN_create"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
-        android:layout_alignParentBottom="true"
-        android:clickable="true"
-        android:text="Create"
         android:layout_marginBottom="50dp"
-        />
+        android:clickable="true"
+        android:tag="create"
+        android:text="Create" />
 
 
     <Spinner

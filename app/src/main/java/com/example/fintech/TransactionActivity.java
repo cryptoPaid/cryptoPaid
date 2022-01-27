@@ -10,10 +10,18 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.fintech.Classes.Block;
 import com.example.fintech.Classes.BlockChain;
 import com.example.fintech.Classes.Transaction;
+import com.example.fintech.Classes.User;
 import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONException;
@@ -34,12 +42,14 @@ public class TransactionActivity extends AppCompatActivity {
     private Spinner transaction_SPNR_contractType;
     private EditText transaction_EDT_address;
     private EditText transaction_EDT_amount;
+    BlockChain stasCoin = new BlockChain();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction);
         findViews();
+        transaction_BTN_create.setOnClickListener(clicked);
         ArrayAdapter<String> typeAdapter = new ArrayAdapter<String>(TransactionActivity.this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.types));
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         transaction_SPNR_transType.setAdapter(typeAdapter);
@@ -49,10 +59,9 @@ public class TransactionActivity extends AppCompatActivity {
         contractAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         transaction_SPNR_contractType.setAdapter(contractAdapter);
         transaction_SPNR_contractType.setOnItemSelectedListener(onContextItemSelected);
-
+        postRequest();
 
 //
-//        BlockChain stasCoin = new BlockChain();
 ////console.log('Blockchain valid?  ' + micaCoin.isChainValidate())
 //
 //        stasCoin.createTransaction(new Transaction("address1", "address2", 100), pendingTransaction);
@@ -93,6 +102,30 @@ public class TransactionActivity extends AppCompatActivity {
 //        }
     }
 
+    private View.OnClickListener clicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if(v.getTag().toString().equals("create")){
+                createTransaction();
+            }
+
+        }
+    };
+
+    private void createTransaction() {
+        if(transaction_SPNR_transType.getSelectedItem().toString().equals("Money")){
+            stasCoin.createTransaction(new Transaction("address1", transaction_EDT_address.getText().toString(), Integer.parseInt(transaction_EDT_amount.getText().toString())), pendingTransaction);
+
+
+            Log.d("stas", "address: " + transaction_EDT_address.getText().toString());
+            Log.d("stas", "amount " + transaction_EDT_amount.getText().toString());
+        }else if(transaction_SPNR_transType.getSelectedItem().toString().equals("Contract")){
+
+        }
+
+    }
+
+
     private AdapterView.OnItemSelectedListener onContextItemSelected = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -129,4 +162,92 @@ public class TransactionActivity extends AppCompatActivity {
             i++;
         }
     }
+
+
+    //////////// TEST FOR USER API ///////////////
+    private void postRequest() {
+        User user = new User("stas.krot1996@gmail.com", "MANAGER", "Demo User","451451dvd");
+
+        String url = "http://192.168.137.1:8050/blockchain/users";
+        JSONObject js = new JSONObject();
+//        JSONObject itemJs = new JSONObject();
+//        JSONObject createdJs = new JSONObject();
+//        JSONObject userIdJs = new JSONObject();
+//        JSONObject userDetailIdJs = new JSONObject();
+//        JSONObject locationJs = new JSONObject();
+//        JSONObject itemAttJs = new JSONObject();
+
+        try {
+//            itemJs.put("space","");
+//            itemJs.put("id","");
+            js.put("email", user.getEmail());
+            js.put("role",user.getRole());
+            js.put("username",user.getUsername());
+            js.put("password",user.getPassword());
+
+
+//            js.put("type","parkingLot");
+//            js.put("name",park.getName());
+//            js.put("active",park.getActive());
+//            js.put("createdTimestamp",date.getTime());
+
+//            userDetailIdJs.put("space","2021b.stanislav.krot");
+//            userDetailIdJs.put("email", email);
+//            userIdJs.put("userId", userDetailIdJs);
+//            createdJs.put("createdBy", userIdJs);
+
+//            js.put("CreatedBy",cb);
+//
+//            locationJs.put("lat",currentLocation.getLatitude());
+//            locationJs.put("lng", currentLocation.getLongitude());
+//            js.put("location",locationJs);
+
+//            for (Map.Entry<String, Object> pair : itemAtt.entrySet()) {
+//                itemAttJs.put(pair.getKey(),pair.getValue());
+//            }
+         //   js.put("itemAttributes",js);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(
+                Request.Method.POST, url, js,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("stas", "response: " + response.toString());
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("stas", "Error: " + error.getMessage());
+                try {
+                    byte[] htmlBodyBytes = error.networkResponse.data;
+                    Log.e("stas", new String(htmlBodyBytes), error);
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Log.d("stas10","getting params");
+                Map<String,String> params = new HashMap<String,String>();
+
+                Log.d("stas10","returned params");
+                return params;
+            }
+            @Override
+            public Map<String,String> getHeaders() throws AuthFailureError {
+                Map<String,String> params = new HashMap<String,String>();
+
+                params.put("Content-Type","application/json; charset=utf-8");
+                return params;
+            }
+        };
+
+        Volley.newRequestQueue(this).add(jsonObjReq);
+    }
+
+
 }
