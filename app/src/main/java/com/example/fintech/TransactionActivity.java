@@ -231,21 +231,16 @@ public class TransactionActivity extends AppCompatActivity {
         }) {
             @Override
             protected Map<String,String> getParams(){
-                Log.d("stas10","getting params");
                 Map<String,String> params = new HashMap<String,String>();
-
-                Log.d("stas10","returned params");
                 return params;
             }
             @Override
-            public Map<String,String> getHeaders() throws AuthFailureError {
+            public Map<String,String> getHeaders() throws AuthFailureError{
                 Map<String,String> params = new HashMap<String,String>();
-
                 params.put("Content-Type","application/json; charset=utf-8");
                 return params;
             }
         };
-
         Volley.newRequestQueue(this).add(jsonObjReq);
     }
 
