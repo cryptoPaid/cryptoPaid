@@ -60,7 +60,7 @@ public class TransactionActivity extends AppCompatActivity {
         contractAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         transaction_SPNR_contractType.setAdapter(contractAdapter);
         transaction_SPNR_contractType.setOnItemSelectedListener(onContextItemSelected);
-        postRequest();
+//        postRequest();
 
 //
 ////console.log('Blockchain valid?  ' + micaCoin.isChainValidate())
@@ -166,87 +166,87 @@ public class TransactionActivity extends AppCompatActivity {
 
 
     //////////// TEST FOR USER API ///////////////
-    private void postRequest() {
-        User user = new User("stas.krot1996@gmail.com", "MANAGER", "Demo User","451451dvd");
-        UserId userId = new UserId("2021b.johny.stas","stas.krot1996@gmail.com");
-        String url = "http://192.168.137.1:8050/blockchain/users/";
-        JSONObject js = new JSONObject();
-        JSONObject itemJs = new JSONObject();
-//        JSONObject createdJs = new JSONObject();
-//        JSONObject userIdJs = new JSONObject();
-//        JSONObject userDetailIdJs = new JSONObject();
-//        JSONObject locationJs = new JSONObject();
-//        JSONObject itemAttJs = new JSONObject();
-
-        try {
-//            itemJs.put("space","");
-//            itemJs.put("id","");
-            itemJs.put("space", userId.getSpace());
-            itemJs.put("email" , userId.getSpace());
-
-            js.put("userId", itemJs);
-            js.put("email", user.getEmail());
-            js.put("role",user.getRole());
-            js.put("username",user.getUsername());
-            js.put("password",user.getPassword());
-            Log.d("stas", js.toString() );
-//            js.put("type","parkingLot");
-//            js.put("name",park.getName());
-//            js.put("active",park.getActive());
-//            js.put("createdTimestamp",date.getTime());
-
-//            userDetailIdJs.put("space","2021b.stanislav.krot");
-//            userDetailIdJs.put("email", email);
-//            userIdJs.put("userId", userDetailIdJs);
-//            createdJs.put("createdBy", userIdJs);
-
-//            js.put("CreatedBy",cb);
+//    private void postRequest() {
+//        User user = new User("stas.krot1996@gmail.com", "MANAGER", "Demo User","451451dvd");
+//        UserId userId = new UserId("2021b.johny.stas","stas.krot1996@gmail.com");
+//        String url = "http://192.168.137.1:8050/blockchain/users/";
+//        JSONObject js = new JSONObject();
+//        JSONObject itemJs = new JSONObject();
+////        JSONObject createdJs = new JSONObject();
+////        JSONObject userIdJs = new JSONObject();
+////        JSONObject userDetailIdJs = new JSONObject();
+////        JSONObject locationJs = new JSONObject();
+////        JSONObject itemAttJs = new JSONObject();
 //
-//            locationJs.put("lat",currentLocation.getLatitude());
-//            locationJs.put("lng", currentLocation.getLongitude());
-//            js.put("location",locationJs);
-
-//            for (Map.Entry<String, Object> pair : itemAtt.entrySet()) {
-//                itemAttJs.put(pair.getKey(),pair.getValue());
+//        try {
+////            itemJs.put("space","");
+////            itemJs.put("id","");
+//            itemJs.put("space", userId.getSpace());
+//            itemJs.put("email" , userId.getSpace());
+//
+//            js.put("userId", itemJs);
+//            js.put("email", user.getEmail());
+//            js.put("role",user.getRole());
+//            js.put("username",user.getUsername());
+//            js.put("password",user.getPassword());
+//            Log.d("stas", js.toString() );
+////            js.put("type","parkingLot");
+////            js.put("name",park.getName());
+////            js.put("active",park.getActive());
+////            js.put("createdTimestamp",date.getTime());
+//
+////            userDetailIdJs.put("space","2021b.stanislav.krot");
+////            userDetailIdJs.put("email", email);
+////            userIdJs.put("userId", userDetailIdJs);
+////            createdJs.put("createdBy", userIdJs);
+//
+////            js.put("CreatedBy",cb);
+////
+////            locationJs.put("lat",currentLocation.getLatitude());
+////            locationJs.put("lng", currentLocation.getLongitude());
+////            js.put("location",locationJs);
+//
+////            for (Map.Entry<String, Object> pair : itemAtt.entrySet()) {
+////                itemAttJs.put(pair.getKey(),pair.getValue());
+////            }
+//         //   js.put("itemAttributes",js);
+//
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        JsonObjectRequest jsonObjReq = new JsonObjectRequest(
+//                Request.Method.POST, url, js,
+//                new Response.Listener<JSONObject>() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//                        Log.d("stas", "response: " + response.toString());
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.d("stas", "Error: " + error.getMessage());
+//                try {
+//                    byte[] htmlBodyBytes = error.networkResponse.data;
+//                    Log.e("stas", new String(htmlBodyBytes), error);
+//                } catch (NullPointerException e) {
+//                    e.printStackTrace();
+//                }
 //            }
-         //   js.put("itemAttributes",js);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(
-                Request.Method.POST, url, js,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("stas", "response: " + response.toString());
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("stas", "Error: " + error.getMessage());
-                try {
-                    byte[] htmlBodyBytes = error.networkResponse.data;
-                    Log.e("stas", new String(htmlBodyBytes), error);
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                }
-            }
-        }) {
-            @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String,String>();
-                return params;
-            }
-            @Override
-            public Map<String,String> getHeaders() throws AuthFailureError{
-                Map<String,String> params = new HashMap<String,String>();
-                params.put("Content-Type","application/json; charset=utf-8");
-                return params;
-            }
-        };
-        Volley.newRequestQueue(this).add(jsonObjReq);
-    }
+//        }) {
+//            @Override
+//            protected Map<String,String> getParams(){
+//                Map<String,String> params = new HashMap<String,String>();
+//                return params;
+//            }
+//            @Override
+//            public Map<String,String> getHeaders() throws AuthFailureError{
+//                Map<String,String> params = new HashMap<String,String>();
+//                params.put("Content-Type","application/json; charset=utf-8");
+//                return params;
+//            }
+//        };
+//        Volley.newRequestQueue(this).add(jsonObjReq);
+//    }
 
 
 }

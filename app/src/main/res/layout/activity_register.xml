@@ -10,22 +10,21 @@
         android:id="@+id/Register_LBL_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register"
-        android:textSize="25sp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
-        />
+        android:text="Register"
+        android:textSize="25sp" />
 
     <EditText
         android:id="@+id/Register_EDT_first"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="First Name"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
         android:layout_below="@id/Register_LBL_title"
+        android:layout_marginLeft="50dp"
         android:layout_marginTop="50dp"
-        />
+        android:layout_marginRight="50dp"
+        android:hint="First Name"
+        android:tag="@string/first_name" />
 
     <EditText
         android:id="@+id/Register_EDT_last"
@@ -36,7 +35,8 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="50dp"
         android:hint="last Name"
-        />
+        android:tag="@string/last_name" />
+
     <EditText
         android:id="@+id/Register_EDT_email"
         android:layout_width="match_parent"
@@ -46,7 +46,8 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="50dp"
         android:hint="email"
-        />
+        android:tag="@string/email" />
+
     <EditText
         android:id="@+id/Register_EDT_password"
         android:layout_width="match_parent"
@@ -55,18 +56,17 @@
         android:layout_marginLeft="50dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="50dp"
-        android:hint="password"
-        />
+        android:hint="@string/password"
+        android:tag="@string/password" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/Register_BTN_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register"
         android:layout_below="@id/Register_EDT_password"
-        android:layout_marginTop="100dp"
         android:layout_centerHorizontal="true"
-
-        />
+        android:layout_marginTop="100dp"
+        android:tag="@string/register"
+        android:text="@string/register" />
 
 </RelativeLayout>

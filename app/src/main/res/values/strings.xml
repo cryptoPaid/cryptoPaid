@@ -7,6 +7,8 @@
     <string name="first_name">First Name</string>
     <string name="username">username</string>
     <string name="back_to_settings">BACK TO SETTINGS</string>
+    <string name="password">password</string>
+    <string name="register">Register</string>
 
     <string-array name="types">
         <item>Select Transaction</item>

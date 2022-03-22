@@ -11,9 +11,14 @@
         <entry key="../cryptoPaid/app/src/main/res/layout/activity_show.xml" value="0.27760416666666665" />
         <entry key="../cryptoPaid/app/src/main/res/layout/activity_transaction.xml" value="0.27760416666666665" />
         <entry key="../cryptoPaid/app/src/main/res/layout/activity_update.xml" value="0.27760416666666665" />
+        <entry key="app/src/main/res/layout/activity_create.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/activity_personal.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/activity_register.xml" value="0.26347083195693416" />
+        <entry key="app/src/main/res/layout/activity_show.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/activity_transaction.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/activity_transwait.xml" value="0.21197916666666666" />
+        <entry key="app/src/main/res/layout/activity_update.xml" value="0.37604166666666666" />
       </map>
     </option>
   </component>

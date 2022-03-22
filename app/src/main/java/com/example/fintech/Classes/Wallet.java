@@ -2,20 +2,19 @@ package com.example.fintech.Classes;
 
 public class Wallet {
 
-   private String credit_card;
-   private String cvv;
-   private String date;
+   private String privateKey;
+   private String publicKey;
    private double balance;
 
 
    public Wallet (){}
 
-    public Wallet (String credit_card, String cvv, String date, double balance){
-       this.credit_card = credit_card;
-       this.cvv = cvv;
-       this.date = date;
-       this.balance = balance;
+    public Wallet ( String privateKey, String publicKey, double balance){
+      this.privateKey = privateKey;
+      this.publicKey = publicKey;
+      this.balance = balance;
     }
+
 
 
 }
