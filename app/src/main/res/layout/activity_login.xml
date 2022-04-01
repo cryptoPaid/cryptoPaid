@@ -25,38 +25,35 @@
         android:layout_marginTop="25dp"
         />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/Login_BTN_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login"
         android:layout_below="@id/Login_EDT_password"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:tag="login"
-        />
+        android:text="Login" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/Login_BTN_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register"
         android:layout_below="@id/Login_BTN_login"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:tag="register"
-        />
+        android:text="Register" />
 
     <TextView
         android:id="@+id/Login_LBL_forgotPass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="forgot your password?"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="150dp"
         android:layout_marginLeft="50dp"
+        android:layout_marginBottom="150dp"
         android:clickable="true"
         android:tag="forgotPass"
-    />
+        android:text="forgot your password?" />
 
 </RelativeLayout>

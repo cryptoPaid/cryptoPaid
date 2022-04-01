@@ -2,10 +2,12 @@ package com.example.fintech;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -13,8 +15,8 @@ import com.google.android.material.button.MaterialButton;
 
 public class LoginActivity extends AppCompatActivity {
     private TextView Login_LBL_forgotPass;
-    private MaterialButton Login_BTN_register;
-    private MaterialButton Login_BTN_login;
+    private Button Login_BTN_register;
+    private Button Login_BTN_login;
     private EditText Login_EDT_password;
     private EditText Login_EDT_username;
     private String email;
@@ -27,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
         findViews();
         Login_LBL_forgotPass.setOnClickListener(fillData);
         Login_BTN_register.setOnClickListener(fillData);
-        Login_BTN_login.setOnClickListener(fillData);
+//        Login_BTN_login.setOnClickListener(fillData);
         Login_EDT_password.setOnClickListener(fillData);
         Login_EDT_username.setOnClickListener(fillData);
     }
@@ -43,8 +45,8 @@ public class LoginActivity extends AppCompatActivity {
         if (view.getTag().toString().equals("login")) {
 
         } else if ((view.getTag().toString().equals("register"))) {
-//            Intent intent = new Intent(this, RegisterActivity.class);
-//            this.startActivity(intent);
+            Intent intent = new Intent(this, RegisterActivity.class);
+            this.startActivity(intent);
         } else if ((view.getTag().toString().equals("forgotPass"))) {
 
         }

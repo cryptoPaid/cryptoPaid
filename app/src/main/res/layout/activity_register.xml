@@ -59,14 +59,14 @@
         android:hint="@string/password"
         android:tag="@string/password" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/Register_BTN_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/Register_EDT_password"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
-        android:tag="@string/register"
+        android:tag="register"
         android:text="@string/register" />
 
 </RelativeLayout>
