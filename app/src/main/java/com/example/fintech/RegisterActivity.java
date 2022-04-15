@@ -7,9 +7,13 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
+import com.example.fintech.Classes.BlockChain;
 import com.example.fintech.Classes.User;
 import com.example.fintech.Classes.Wallet;
 import com.google.android.material.button.MaterialButton;
@@ -32,9 +36,11 @@ public class RegisterActivity extends AppCompatActivity {
     private String password;
     private String firstName;
     private String lastName;
+    private String role;
     private KeyPairGenerator keyPairGenerator;
     private PrivateKey privateKey;
     private PublicKey publicKey;
+    private Spinner Register_SPNR_Role;
 
 
     @Override
@@ -43,6 +49,10 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         findViews();
         Register_BTN_register.setOnClickListener(changeActivity);
+        ArrayAdapter<String> typeAdapter = new ArrayAdapter<String>(RegisterActivity.this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.role));
+        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Register_SPNR_Role.setAdapter(typeAdapter);
+        Register_SPNR_Role.setOnItemSelectedListener(onContextItemSelected);
     }
 
     private View.OnClickListener changeActivity = new View.OnClickListener() {
@@ -66,8 +76,7 @@ public class RegisterActivity extends AppCompatActivity {
                 generateKeys();
                 Log.d("stas", "private " +  privateKey);
                 Log.d("stas", "public " + publicKey);
-                User user = new User(email,password,email,new Wallet(privateKey,publicKey,1000),firstName,lastName);
-
+                User user = new User(email,password,email,role ,new Wallet(privateKey,publicKey,1000),firstName,lastName, new BlockChain());
                 // TODO: 01/04/2022
                 /*
                 *  CHECK VALIDITY OF USER INPUT
@@ -99,6 +108,9 @@ public class RegisterActivity extends AppCompatActivity {
         }
         if (!isValidPassword(password)) {
             return false;
+        }
+        if(role == null){
+            role = "Regular";
         }
         return true;
     }
@@ -154,12 +166,30 @@ public class RegisterActivity extends AppCompatActivity {
         return isValid;
     }
 
+
+    private AdapterView.OnItemSelectedListener onContextItemSelected = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            if(Register_SPNR_Role.getSelectedItem().toString().equals("Admin User")){
+                role = "Admin";
+            }else if(Register_SPNR_Role.getSelectedItem().toString().equals("Regular User")){
+                role = "Regular";
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+            return;
+        }
+    };
+
+
     private void findViews() {
         Register_BTN_register = findViewById(R.id.Register_BTN_register);
         Register_EDT_password = findViewById(R.id.Register_EDT_password);
         Register_EDT_email = findViewById(R.id.Register_EDT_email);
         Register_EDT_last = findViewById(R.id.Register_EDT_last);
         Register_EDT_first = findViewById(R.id.Register_EDT_first);
-
+        Register_SPNR_Role = findViewById(R.id.Register_SPNR_Role);
     }
 }

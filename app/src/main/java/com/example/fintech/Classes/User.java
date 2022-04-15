@@ -9,13 +9,13 @@ public class User {
     private Wallet wallet;
     private String firstName;
     private String lastName;
-
+    private BlockChain johnstaCoin;
 
 
     public User(){
     }
 
-    public User(String username, String password, String email, String role, Wallet wallet, String firstName, String lastName) {
+    public User(String username, String password, String email, String role, Wallet wallet, String firstName, String lastName, BlockChain johnstaCoin) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -23,6 +23,7 @@ public class User {
         this.wallet = wallet;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.johnstaCoin = johnstaCoin;
     }
 
     public User(String username, String password, String email, Wallet wallet, String firstName, String lastName) {

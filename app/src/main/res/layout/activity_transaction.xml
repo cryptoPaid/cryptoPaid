@@ -48,8 +48,7 @@
         android:layout_marginLeft="150dp"
         android:layout_marginTop="25dp"
         android:hint="Amount"
-        android:visibility="invisible"
-        />
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/transaction_BTN_create"
@@ -71,8 +70,7 @@
         android:layout_below="@id/transaction_SPNR_transType"
         android:layout_marginTop="25dp"
         android:autofillHints="transaction Type"
-        android:visibility="invisible"
-        />
+        android:visibility="invisible" />
 
 
 

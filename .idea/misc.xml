@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="CiFilterState">
+    <option name="selectedSeverities">
+      <map>
+        <entry key="Critical" value="true" />
+        <entry key="High" value="true" />
+        <entry key="Medium" value="true" />
+        <entry key="Low" value="true" />
+        <entry key="Information" value="true" />
+        <entry key="Unknown" value="true" />
+        <entry key="Pending" value="true" />
+        <entry key="Normal" value="true" />
+      </map>
+    </option>
+    <option name="selectedLicences">
+      <map />
+    </option>
+    <option name="selectedScopes">
+      <map />
+    </option>
+  </component>
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
@@ -16,10 +36,47 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.31689147949218754" />
         <entry key="app/src/main/res/layout/activity_personal.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/activity_register.xml" value="0.26347083195693416" />
+        <entry key="app/src/main/res/layout/activity_settings.xml" value="0.29393115942028986" />
         <entry key="app/src/main/res/layout/activity_show.xml" value="0.37604166666666666" />
-        <entry key="app/src/main/res/layout/activity_transaction.xml" value="0.19791666666666666" />
+        <entry key="app/src/main/res/layout/activity_transaction.xml" value="0.20400950113932292" />
         <entry key="app/src/main/res/layout/activity_transwait.xml" value="0.21197916666666666" />
         <entry key="app/src/main/res/layout/activity_update.xml" value="0.37604166666666666" />
+      </map>
+    </option>
+  </component>
+  <component name="LocalFilterState">
+    <option name="selectedSeverities">
+      <map>
+        <entry key="Critical" value="true" />
+        <entry key="High" value="true" />
+        <entry key="Medium" value="true" />
+        <entry key="Low" value="true" />
+        <entry key="Information" value="true" />
+        <entry key="Unknown" value="true" />
+        <entry key="Pending" value="true" />
+        <entry key="Normal" value="true" />
+      </map>
+    </option>
+    <option name="selectedLicences">
+      <map>
+        <entry key="Unknown" value="true" />
+      </map>
+    </option>
+    <option name="selectedScopes">
+      <map>
+        <entry key="ApiElements" value="true" />
+        <entry key="Compile" value="true" />
+        <entry key="DebugApiElements" value="true" />
+        <entry key="DebugRuntimeElements" value="true" />
+        <entry key="Jvm-api" value="true" />
+        <entry key="Jvm-runtime" value="true" />
+        <entry key="None" value="true" />
+        <entry key="ReleaseApiElements" value="true" />
+        <entry key="ReleaseApiPublication" value="true" />
+        <entry key="ReleaseRuntimeElements" value="true" />
+        <entry key="ReleaseRuntimePublication" value="true" />
+        <entry key="Runtime" value="true" />
+        <entry key="RuntimeElements" value="true" />
       </map>
     </option>
   </component>
