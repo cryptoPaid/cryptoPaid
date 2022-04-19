@@ -1,5 +1,7 @@
 package com.example.fintech.Classes;
 
+import java.util.ArrayList;
+
 public class User {
 
     private String username;
@@ -10,12 +12,14 @@ public class User {
     private String firstName;
     private String lastName;
     private BlockChain johnstaCoin;
+    private ArrayList<Transaction> pendingTransaction;
+
 
 
     public User(){
     }
 
-    public User(String username, String password, String email, String role, Wallet wallet, String firstName, String lastName, BlockChain johnstaCoin) {
+    public User(String username, String password, String email, String role, Wallet wallet, String firstName, String lastName, BlockChain johnstaCoin, ArrayList<Transaction> pendingTransaction) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -24,6 +28,7 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.johnstaCoin = johnstaCoin;
+        this.pendingTransaction = pendingTransaction;
     }
 
     public User(String username, String password, String email, Wallet wallet, String firstName, String lastName) {

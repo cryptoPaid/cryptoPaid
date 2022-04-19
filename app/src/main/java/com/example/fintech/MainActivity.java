@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout main_LAY_create;
     private RelativeLayout main_LAY_Settings;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
                 settingActivity();
             } else if ((view.getTag().toString().equals("create"))) {
             Intent intent = new Intent(MainActivity.this, TransactionActivity.class);
+
             startActivity(intent);
             } else if ((view.getTag().toString().equals("update"))) {
 //            Intent intent = new Intent(this, RegisterActivity.class);

@@ -5,13 +5,13 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Transaction {
-    private int amount;
+    private double amount;
     private String toAddress;
     private String fromAddress;
     private String hash;
 
 
-    public Transaction(String fromAddress,String toAddress,int amount) {
+    public Transaction(String fromAddress,String toAddress,double amount) {
         this.fromAddress = fromAddress;
         this.toAddress = toAddress;
         this.amount = amount;
@@ -41,7 +41,7 @@ public class Transaction {
         return hash;
     }
 
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 

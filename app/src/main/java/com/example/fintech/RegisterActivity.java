@@ -23,6 +23,7 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -41,6 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
     private PrivateKey privateKey;
     private PublicKey publicKey;
     private Spinner Register_SPNR_Role;
+    private User user;
 
 
     @Override
@@ -66,41 +68,57 @@ public class RegisterActivity extends AppCompatActivity {
                 firstName = Register_EDT_first.getText().toString();
                 lastName = Register_EDT_last.getText().toString();
                 password = Register_EDT_password.getText().toString();
-                checkValidity();
+                if(checkValidity()){
+                    createUser();
+                    Log.d("stas", user.toString());
+                    Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
 
 
 
               //  if(checkValidity()){
                     //Wallet wallet = new Wallet("private","public",100000);
                     //User user = new User(email,password,email,wallet,firstName,lastName);
-                generateKeys();
-                Log.d("stas", "private " +  privateKey);
-                Log.d("stas", "public " + publicKey);
-                User user = new User(email,password,email,role ,new Wallet(privateKey,publicKey,1000),firstName,lastName, new BlockChain());
-                // TODO: 01/04/2022
-                /*
-                *  CHECK VALIDITY OF USER INPUT
-                *  SEND USER DETAILS TO DATABASE
-                *
-                *
-                *
-                *
-                * */
+
+
             }
         }
 
-        private void generateKeys() {
-            try {
-                keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-                keyPairGenerator.initialize(1024);
-                KeyPair keyPair = keyPairGenerator.generateKeyPair();
-                privateKey = keyPair.getPrivate();
-                publicKey = keyPair.getPublic();
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
-        }
+
     };
+
+    private void createUser() {
+        generateKeys();
+        Log.d("stas", "private " +  privateKey);
+        Log.d("stas", "public " + publicKey);
+        user = new User(email,password,email,role ,new Wallet(privateKey,publicKey,1000),firstName,lastName, new BlockChain(), new ArrayList<>());
+        // TODO: 01/04/2022
+        /*
+         *  CHECK VALIDITY OF USER INPUT
+         *  SEND USER DETAILS TO DATABASE
+         *
+         *
+         *
+         *
+         * */
+
+
+    }
+
+
+    private void generateKeys() {
+        try {
+            keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+            keyPairGenerator.initialize(1024);
+            KeyPair keyPair = keyPairGenerator.generateKeyPair();
+            privateKey = keyPair.getPrivate();
+            publicKey = keyPair.getPublic();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+    }
 
     private boolean checkValidity() {
         if (!emailValidator(email)) {

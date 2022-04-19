@@ -37,13 +37,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TransactionActivity extends AppCompatActivity {
-    private ArrayList<Transaction> pendingTransaction = new ArrayList<>();
+//    private ArrayList<Transaction> pendingTransaction = new ArrayList<>();
     private Spinner transaction_SPNR_transType;
     private Button transaction_BTN_create;
     private Spinner transaction_SPNR_contractType;
     private EditText transaction_EDT_address;
     private EditText transaction_EDT_amount;
-    BlockChain stasCoin = new BlockChain();
+    BlockChain johnstaCoin = new BlockChain();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,12 +115,21 @@ public class TransactionActivity extends AppCompatActivity {
 
     private void createTransaction() {
         if(transaction_SPNR_transType.getSelectedItem().toString().equals("Money")){
-            stasCoin.createTransaction(new Transaction("address1", transaction_EDT_address.getText().toString(), Integer.parseInt(transaction_EDT_amount.getText().toString())), pendingTransaction);
+//            johnstaCoin.createTransaction(new Transaction("address1", transaction_EDT_address.getText().toString(), Integer.parseInt(transaction_EDT_amount.getText().toString())), pendingTransaction);
 
 
             Log.d("stas", "address: " + transaction_EDT_address.getText().toString());
             Log.d("stas", "amount " + transaction_EDT_amount.getText().toString());
         }else if(transaction_SPNR_transType.getSelectedItem().toString().equals("Contract")){
+
+            // TODO: 16/04/2022
+            /*
+            *  GET PRIVATE KEY FROM USER
+            *  GET BLOCKCHAIN FROM USER
+            *  GET USER PENDING TRANSACTIONS
+            * */
+
+//            johnstaCoin.createTransaction(new Transaction("address1", transaction_EDT_amount.getText().toString(), Double.parseDouble(transaction_EDT_amount.getText().toString())), pendingTransaction);
 
         }
 
