@@ -22,6 +22,7 @@
         <item>Select Role</item>
         <item>Regular User</item>
         <item>Admin User</item>
+        <item>Manager User</item>
     </string-array>
 
     <string-array name="contract">

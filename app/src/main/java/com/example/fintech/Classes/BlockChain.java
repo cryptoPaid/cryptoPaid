@@ -86,4 +86,11 @@ public class BlockChain {
         return balance;
     }
 
+    public int getMiningReward() {
+        return miningReward;
+    }
+
+    public int getDifficulty() {
+        return difficulty;
+    }
 }

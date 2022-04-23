@@ -77,6 +77,25 @@ public class User {
     }
 
 
+    public Wallet getWallet() {
+        return wallet;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public BlockChain getJohnstaCoin() {
+        return johnstaCoin;
+    }
+
+    public ArrayList<Transaction> getPendingTransaction() {
+        return pendingTransaction;
+    }
 
     @Override
     public String toString() {

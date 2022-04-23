@@ -21,6 +21,23 @@ public class Wallet {
     }
 
 
+    public PrivateKey getPrivateKey() {
+        return privateKey;
+    }
 
+    public PublicKey getPublicKey() {
+        return publicKey;
+    }
 
+    public double getBalance() {
+        return balance;
+    }
+
+    @Override
+    public String toString() {
+        return "privateKey=" + privateKey +
+                ", publicKey=" + publicKey +
+                ", balance=" + balance;
+    }
 }
+
