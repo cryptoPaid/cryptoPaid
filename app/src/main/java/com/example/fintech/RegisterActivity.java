@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -19,12 +20,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.fintech.Classes.Block;
 import com.example.fintech.Classes.BlockChain;
+import com.example.fintech.Classes.CustomJsonRequest;
+import com.example.fintech.Classes.Transaction;
 import com.example.fintech.Classes.User;
 import com.example.fintech.Classes.UserId;
 import com.example.fintech.Classes.Wallet;
 import com.google.android.material.button.MaterialButton;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -33,8 +38,10 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -239,11 +246,28 @@ public class RegisterActivity extends AppCompatActivity {
         generateKeys();
         user = new User("stas.krot1996@gmail.com","Password1","stas.krot1996@gmail.com","MANAGER" ,new Wallet(privateKey,publicKey,1000),"stas","krot", new BlockChain(), new ArrayList<>());
 
+        Transaction tr1 = new Transaction("ADDRESS1","ADDRES2", 150);
+        Transaction tr2 = new Transaction("ADDRESS3","ADDRES4", 250);
+
+        ArrayList<Transaction> block =new ArrayList<>();
+        block.add(tr1);
+        block.add(tr2);
+
+        Block myblock = new Block(new Timestamp(System.currentTimeMillis()), block, "0");
+
+
+        ArrayList<Block> blockchain =new ArrayList<>();
+        blockchain.add(myblock);
+
         //User user = new User("stas.krot1996@gmail.com", "MANAGER", "Demo User","451451dvd");
         //UserId userId = new UserId("2021b.johny.stas","stas.krot1996@gmail.com");
-        String url = "http://192.168.1.223:8050/blockchain/users/";
+        String url = "http://192.168.1.211:8050/blockchain/users/";
         JSONObject js = new JSONObject();
         JSONObject walletJs = new JSONObject();
+        JSONObject transJs = new JSONObject();
+        JSONObject transJs2 = new JSONObject();
+        JSONObject blockjs = new JSONObject();
+        JSONObject blocksjs = new JSONObject();
         JSONObject blockChainJs = new JSONObject();
 
 
@@ -260,24 +284,60 @@ public class RegisterActivity extends AppCompatActivity {
 //            itemJs.put("email" , userId.getSpace());
 
 //            js.put("userId", itemJs);
-            js.put("email", user.getEmail());
             js.put("role",user.getRole());
+            js.put("email", user.getEmail());
             js.put("username",user.getEmail());
             js.put("password",user.getPassword());
 
-            walletJs.put("publicKey", user.getWallet().getPublicKey());
-            walletJs.put("privateKey", user.getWallet().getPrivateKey());
-            walletJs.put("balance", user.getWallet().getBalance());
-            js.put("wallet", walletJs);
 
-            js.put("firstName",user.getFirstName());
-            js.put("lastName",user.getLastName());
 
-            blockChainJs.put("chain", user.getJohnstaCoin().getChain());
+
+
+            blockjs.put("timestamp", blockchain.get(0).getTimestamp());
+            blockjs.put("data", blockchain.get(0).getData());
+            blockjs.put("hash", blockchain.get(0).getHash());
+            blockjs.put("prevHash", blockchain.get(0).getPreviousHash());
+
+
+            transJs.put("toAddress", blockchain.get(0).getTransaction().get(0).getToAddress());
+            transJs.put("fromAddress", blockchain.get(0).getTransaction().get(0).getFromAddress());
+            transJs.put("amount", blockchain.get(0).getTransaction().get(0).getAmount());
+            transJs.put("hash", blockchain.get(0).getTransaction().get(0).getHash());
+            blockjs.put("trans1", transJs.toString());
+
+//
+            transJs2.put("toAddress", blockchain.get(0).getTransaction().get(1).getToAddress());
+            transJs2.put("fromAddress", blockchain.get(0).getTransaction().get(1).getFromAddress());
+            transJs2.put("amount", blockchain.get(0).getTransaction().get(1).getAmount());
+            transJs2.put("hash", blockchain.get(0).getTransaction().get(1).getHash());
+            blockjs.put("trans2", transJs.toString());
+            blockjs.put("nonce", 0);
+            blockChainJs.put("list", blockjs);
+
+//            Log.d("post", "type of "+ transJs.getClass() + "");
+
+
+
+
+
+//            blockChainJs.put("list", blockjs);
             blockChainJs.put("miningReward", user.getJohnstaCoin().getMiningReward());
             blockChainJs.put("difficulty", user.getJohnstaCoin().getDifficulty());
             js.put("johnStaCoin", blockChainJs);
-            js.put("pendingTransaction", user.getPendingTransaction());
+
+
+
+            walletJs.put("publicKey", user.getWallet().getPublicKey().toString());
+            walletJs.put("privateKey", user.getWallet().getPrivateKey().toString());
+            walletJs.put("balance", user.getWallet().getBalance());
+            js.put("wallet", walletJs);
+////
+////            js.put("firstName",user.getFirstName());
+////            js.put("lastName",user.getLastName());
+//
+//            blockChainJs.put("chain", user.getJohnstaCoin().getChain());
+
+//            js.put("pendingTransaction", user.getPendingTransaction());
 
 
 
@@ -338,7 +398,58 @@ public class RegisterActivity extends AppCompatActivity {
             }
         };
         Volley.newRequestQueue(this).add(jsonObjReq);
+//        _____________________________________
+
+//        CustomJsonRequest customJsonRequest = new CustomJsonRequest(
+//                Request.Method.POST, url, js,
+//                new Response.Listener<JSONArray>() {
+//                    @Override
+//                    public void onResponse(JSONArray response) {
+//                        if(response.length() == 0){
+//                            Toast.makeText(RegisterActivity.this,"Failed to register user",Toast.LENGTH_SHORT).show();
+//                        }else{
+//                            Toast.makeText(RegisterActivity.this,"response " + response.toString(),Toast.LENGTH_SHORT).show();
+//
+//                        }
+//
+//                        Log.d("post", response.toString() + " i am queen");
+//
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.d("post", "Error: " + error.getMessage());
+//                try {
+//                    byte[] htmlBodyBytes = error.networkResponse.data;
+//                    Log.e("post", new String(htmlBodyBytes), error);
+//                } catch (NullPointerException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }) {
+//            @Override
+//            protected Map<String,String> getParams(){
+//                Log.d("post","getting params");
+//                Map<String,String> params = new HashMap<String,String>();
+//
+//                Log.d("post","returned params");
+//                return params;
+//            }
+//            @Override
+//            public Map<String,String> getHeaders() throws AuthFailureError {
+//                Map<String,String> params = new HashMap<String,String>();
+//
+//                params.put("Content-Type","application/json; charset=utf-8");
+//                return params;
+//            }
+//        };
+//
+//        Volley.newRequestQueue(this).add(customJsonRequest);
     }
+
+
+
+
 
 
 
