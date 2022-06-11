@@ -75,7 +75,7 @@ public class TransactionActivity extends AppCompatActivity {
 //
 //        pendingTransaction = new ArrayList<>();
 //        stasCoin.createTransaction(new Transaction("Bob", "address1", 50), pendingTransaction);
-//        stasCoin.miningPendingTransaction("Bob", pendingTransaction);
+//        stasCoin.miningPendingTransaction("Bob", pendingTransaction);add
 //        Log.d("johny", "Balance of Bob: "+ stasCoin.getBalanceOfAddress("Bob"));
 
 

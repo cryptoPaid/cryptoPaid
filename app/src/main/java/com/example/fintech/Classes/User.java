@@ -97,6 +97,31 @@ public class User {
         return pendingTransaction;
     }
 
+    public User setWallet(Wallet wallet) {
+        this.wallet = wallet;
+        return this;
+    }
+
+    public User setFirstName(String firstName) {
+        this.firstName = firstName;
+        return this;
+    }
+
+    public User setLastName(String lastName) {
+        this.lastName = lastName;
+        return this;
+    }
+
+    public User setJohnstaCoin(BlockChain johnstaCoin) {
+        this.johnstaCoin = johnstaCoin;
+        return this;
+    }
+
+    public User setPendingTransaction(ArrayList<Transaction> pendingTransaction) {
+        this.pendingTransaction = pendingTransaction;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "Account{" +

@@ -33,11 +33,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
+import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -80,7 +84,13 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             Log.d("stas", "private " + view.getTag().toString());
-            postRequest();
+            try {
+                postRequest();
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (InvalidKeySpecException e) {
+                e.printStackTrace();
+            }
 
             if (view.getTag().toString().equals("register")) {
 
@@ -109,7 +119,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     };
 
-    private void createUser() {
+    private void createUser() throws InvalidKeySpecException, NoSuchAlgorithmException {
         generateKeys();
         Log.d("stas", "private " +  privateKey);
         Log.d("stas", "public " + publicKey);
@@ -242,126 +252,83 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     ////////// TEST FOR USER API ///////////////
-    private void postRequest() {
+    private void postRequest() throws NoSuchAlgorithmException, InvalidKeySpecException {
         generateKeys();
         user = new User("stas.krot1996@gmail.com","Password1","stas.krot1996@gmail.com","MANAGER" ,new Wallet(privateKey,publicKey,1000),"stas","krot", new BlockChain(), new ArrayList<>());
+        byte[] publicEncode = publicKey.getEncoded();
+        byte[] privateEncode = privateKey.getEncoded();
+
+/**********************
+            READ KEYS FROM SEREVR
+
+ //        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+//        X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(bytes);
+//        PublicKey pk = keyFactory.generatePublic(publicKeySpec);
+ ****************************/
 
         Transaction tr1 = new Transaction("ADDRESS1","ADDRES2", 150);
         Transaction tr2 = new Transaction("ADDRESS3","ADDRES4", 250);
 
-        ArrayList<Transaction> block =new ArrayList<>();
-        block.add(tr1);
-        block.add(tr2);
+        ArrayList<Transaction> block1 =new ArrayList<>();
+        block1.add(tr1);
+        ArrayList<Transaction> block2 =new ArrayList<>();
+        block2.add(tr2);
+//        block.add(tr2);
 
-        Block myblock = new Block(new Timestamp(System.currentTimeMillis()), block, "0");
+        Block myblock = new Block(new Timestamp(System.currentTimeMillis()), block1, "0");
+        Block myblock2 = new Block(new Timestamp(System.currentTimeMillis()), block2, myblock.getHash());
 
 
         ArrayList<Block> blockchain =new ArrayList<>();
         blockchain.add(myblock);
+        blockchain.add(myblock2);
 
         //User user = new User("stas.krot1996@gmail.com", "MANAGER", "Demo User","451451dvd");
         //UserId userId = new UserId("2021b.johny.stas","stas.krot1996@gmail.com");
-        String url = "http://192.168.1.211:8050/blockchain/users/";
+        String url = "http://192.168.1.223:8050/blockchain/users/";
         JSONObject js = new JSONObject();
         JSONObject walletJs = new JSONObject();
-        JSONObject transJs = new JSONObject();
-        JSONObject transJs2 = new JSONObject();
         JSONObject blockjs = new JSONObject();
-        JSONObject blocksjs = new JSONObject();
+        JSONObject blockjs2 = new JSONObject();
         JSONObject blockChainJs = new JSONObject();
+        JSONArray blocks = new JSONArray();
 
-
-//        JSONObject createdJs = new JSONObject();
-//        JSONObject userIdJs = new JSONObject();
-//        JSONObject userDetailIdJs = new JSONObject();
-//        JSONObject locationJs = new JSONObject();
-//        JSONObject itemAttJs = new JSONObject();
 
         try {
-//            itemJs.put("space","");
-//            itemJs.put("id","");
-//            itemJs.put("space", userId.getSpace());
-//            itemJs.put("email" , userId.getSpace());
-
-//            js.put("userId", itemJs);
             js.put("role",user.getRole());
             js.put("email", user.getEmail());
             js.put("username",user.getEmail());
             js.put("password",user.getPassword());
 
 
-
-
-
             blockjs.put("timestamp", blockchain.get(0).getTimestamp());
             blockjs.put("data", blockchain.get(0).getData());
             blockjs.put("hash", blockchain.get(0).getHash());
             blockjs.put("prevHash", blockchain.get(0).getPreviousHash());
-
-
-            transJs.put("toAddress", blockchain.get(0).getTransaction().get(0).getToAddress());
-            transJs.put("fromAddress", blockchain.get(0).getTransaction().get(0).getFromAddress());
-            transJs.put("amount", blockchain.get(0).getTransaction().get(0).getAmount());
-            transJs.put("hash", blockchain.get(0).getTransaction().get(0).getHash());
-            blockjs.put("trans1", transJs.toString());
-
-//
-            transJs2.put("toAddress", blockchain.get(0).getTransaction().get(1).getToAddress());
-            transJs2.put("fromAddress", blockchain.get(0).getTransaction().get(1).getFromAddress());
-            transJs2.put("amount", blockchain.get(0).getTransaction().get(1).getAmount());
-            transJs2.put("hash", blockchain.get(0).getTransaction().get(1).getHash());
-            blockjs.put("trans2", transJs.toString());
             blockjs.put("nonce", 0);
-            blockChainJs.put("list", blockjs);
-
-//            Log.d("post", "type of "+ transJs.getClass() + "");
-
-
-
-
-
+            blocks.put(blockjs);
 //            blockChainJs.put("list", blockjs);
+
+            blockjs2.put("timestamp", blockchain.get(1).getTimestamp());
+            blockjs2.put("data", blockchain.get(1).getData());
+            blockjs2.put("hash", blockchain.get(1).getHash());
+            blockjs2.put("prevHash", blockchain.get(1).getPreviousHash());
+            blockjs2.put("nonce", 0);
+            blocks.put(blockjs2);
+//
             blockChainJs.put("miningReward", user.getJohnstaCoin().getMiningReward());
             blockChainJs.put("difficulty", user.getJohnstaCoin().getDifficulty());
+////            blockChainJs.put("list1", blockjs);
+            blockChainJs.put("chain", blocks);
             js.put("johnStaCoin", blockChainJs);
 
-
-
-            walletJs.put("publicKey", user.getWallet().getPublicKey().toString());
-            walletJs.put("privateKey", user.getWallet().getPrivateKey().toString());
+//
+            walletJs.put("publicKey", publicEncode.toString());
+            walletJs.put("privateKey", privateEncode.toString());
             walletJs.put("balance", user.getWallet().getBalance());
             js.put("wallet", walletJs);
-////
-////            js.put("firstName",user.getFirstName());
-////            js.put("lastName",user.getLastName());
-//
-//            blockChainJs.put("chain", user.getJohnstaCoin().getChain());
-
-//            js.put("pendingTransaction", user.getPendingTransaction());
-
-
 
             Log.d("post", js.toString());
-//            js.put("type","parkingLot");
-//            js.put("name",park.getName());
-//            js.put("active",park.getActive());
-//            js.put("createdTimestamp",date.getTime());
-
-//            userDetailIdJs.put("space","2021b.stanislav.krot");
-//            userDetailIdJs.put("email", email);
-//            userIdJs.put("userId", userDetailIdJs);
-//            createdJs.put("createdBy", userIdJs);
-
-//            js.put("CreatedBy",cb);
-//
-//            locationJs.put("lat",currentLocation.getLatitude());
-//            locationJs.put("lng", currentLocation.getLongitude());
-//            js.put("location",locationJs);
-
-//            for (Map.Entry<String, Object> pair : itemAtt.entrySet()) {
-//                itemAttJs.put(pair.getKey(),pair.getValue());
-//            }
-         //   js.put("itemAttributes",js);
 
         } catch (JSONException e) {
             e.printStackTrace();

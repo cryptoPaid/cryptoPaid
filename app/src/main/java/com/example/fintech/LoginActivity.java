@@ -5,13 +5,33 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.fintech.Classes.Block;
+import com.example.fintech.Classes.BlockChain;
+import com.example.fintech.Classes.User;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.material.button.MaterialButton;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
     private TextView Login_LBL_forgotPass;
@@ -21,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText Login_EDT_username;
     private String email;
     private String password;
+    private ObjectMapper jackson = new ObjectMapper();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         findViews();
         Login_LBL_forgotPass.setOnClickListener(fillData);
         Login_BTN_register.setOnClickListener(fillData);
-//        Login_BTN_login.setOnClickListener(fillData);
+        Login_BTN_login.setOnClickListener(fillData);
         Login_EDT_password.setOnClickListener(fillData);
         Login_EDT_username.setOnClickListener(fillData);
     }
@@ -43,7 +64,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void buttonClicked(View view) {
         if (view.getTag().toString().equals("login")) {
-
+            Log.d("login", "login clicked ");
+            loginRequest();
         } else if ((view.getTag().toString().equals("register"))) {
             Intent intent = new Intent(this, RegisterActivity.class);
             this.startActivity(intent);
@@ -52,6 +74,93 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
+
+    private void loginRequest() {
+
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+        Login_EDT_username.setText("stas.krot1996@gmail.com");
+        String url = "http://10.0.0.6:8050/blockchain/users/login/2021b.johny.stas/" + Login_EDT_username.getText().toString();
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("login", "person " + response.toString());
+
+//                 Loop through the array elements
+//                for(int i=0;i<response.length();i++){
+                    try {
+                        JSONObject userID = response.getJSONObject("userId");
+                        String role = response.getString("role");
+                        String username = response.getString("username");
+                        String password = response.getString("password");
+                        String firstName = response.getString("firstName");
+                        String lastName = response.getString("lastName");
+                        String email = response.getString("email");
+
+
+                        JSONObject blockchain = response.getJSONObject("johnStaCoin");
+                        ArrayList<Block> block = new ArrayList<>();
+                        JSONObject blockjs = response.getJSONObject("list");
+                        BlockChain johnstacoin = new BlockChain();
+                        for(int i=0;i<blockjs.length();i++) {
+
+
+                        }
+
+
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+//                        Log.d("ptt",c.toString());
+////                        Intent intent = new Intent(LoginActivity.this, StartUpActivity.class);
+//                        intent.putExtra("EMAIL", c.getEmail());
+//                        intent.putExtra("ROLE", c.getRole());
+//                        Log.d("ptt","role is " + c.getRole());
+//                        intent.putExtra("AVATAR", c.getAvatar());
+//                        intent.putExtra("USERNAME", c.getUsername());
+//                        intent.putExtra("NAME",c.getUsername());
+//                        onLoginSuccess(c, intent);
+//                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+//                onLoginFailed();
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+
+
+    }
+
+
+
+
+    // use Jackson to convert JSON to Object
+    private <T> T unmarshal(String json, Class<T> type) {
+        try {
+            //jackson.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+            //System.out.println("in unmarshal " + json.toString());
+            return this.jackson.readValue(json, type);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String marshal(Object moreDetails) {
+        try {
+            //jackson.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+            //System.out.println("in marshal " + moreDetails.toString());
+            return this.jackson.writeValueAsString(moreDetails.toString());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     boolean isEmail(EditText text) {
         CharSequence email = text.getText().toString();
