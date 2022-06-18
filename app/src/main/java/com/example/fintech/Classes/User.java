@@ -1,5 +1,8 @@
 package com.example.fintech.Classes;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 public class User {
@@ -121,6 +124,25 @@ public class User {
         this.pendingTransaction = pendingTransaction;
         return this;
     }
+
+    public static String calculateHash(String password) {
+        MessageDigest digest=null;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        digest.reset();
+
+        byte[] dig = digest.digest(password.getBytes());
+        return bin2hex(dig);
+    }
+    static String bin2hex(byte[] data) {
+        return String.format("%0" + (data.length * 2) + "X", new BigInteger(1, data));
+    }
+
+
 
     @Override
     public String toString() {

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -21,7 +22,8 @@ import com.android.volley.toolbox.Volley;
 import com.example.fintech.Classes.Block;
 import com.example.fintech.Classes.BlockChain;
 import com.example.fintech.Classes.User;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.fintech.Classes.Wallet;
+//import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONArray;
@@ -31,6 +33,12 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
@@ -41,7 +49,10 @@ public class LoginActivity extends AppCompatActivity {
     private EditText Login_EDT_username;
     private String email;
     private String password;
-    private ObjectMapper jackson = new ObjectMapper();
+    byte[] publicKey;
+    byte[] privateKey;
+    Wallet wallet;
+//    private ObjectMapper jackson = new ObjectMapper();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
     private void loginRequest() {
 
         RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
-        Login_EDT_username.setText("stas.krot1996@gmail.com");
+//        Login_EDT_username.setText("stas.krot1996@gmail.com");
         String url = "http://10.0.0.6:8050/blockchain/users/login/2021b.johny.stas/" + Login_EDT_username.getText().toString();
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -87,33 +98,41 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d("login", "person " + response.toString());
 
 //                 Loop through the array elements
-//                for(int i=0;i<response.length();i++){
+                for(int i=0;i<response.length();i++){
                     try {
                         JSONObject userID = response.getJSONObject("userId");
                         String role = response.getString("role");
                         String username = response.getString("username");
                         String password = response.getString("password");
-                        String firstName = response.getString("firstName");
-                        String lastName = response.getString("lastName");
-                        String email = response.getString("email");
-
-
-                        JSONObject blockchain = response.getJSONObject("johnStaCoin");
-                        ArrayList<Block> block = new ArrayList<>();
-                        JSONObject blockjs = response.getJSONObject("list");
-                        BlockChain johnstacoin = new BlockChain();
-                        for(int i=0;i<blockjs.length();i++) {
-
-
+                        if(!checkPasswordValidity(password)){
+                            Toast.makeText(LoginActivity.this,"Failed to Login",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        JSONObject jsonWallet = response.getJSONObject("wallet");
+                        if (readPublic(jsonWallet.getString("publicKey")) != null && readPrivate(jsonWallet.getString("privateKey")) != null){
+                            publicKey = jsonWallet.getString("publicKey").getBytes();
+                            privateKey = jsonWallet.getString("privateKey").getBytes();
+//                            wallet = new Wallet(privateKey, publicKey, Double.parseDouble(jsonWallet.getString("balance")));
+                        } else {
+                            Log.d("error", "Cannot read Keys");
+                            return;
                         }
 
-
-
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.putExtra("role", role);
+                        intent.putExtra("username", username);
+                        intent.putExtra("publicKey", publicKey);
+                        intent.putExtra("privateKey", privateKey);
+                        intent.putExtra("balance", Double.parseDouble(jsonWallet.getString("balance")));
+                        startActivity(intent);
+                        finish();
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
+
+                }
 
 //                        Log.d("ptt",c.toString());
 ////                        Intent intent = new Intent(LoginActivity.this, StartUpActivity.class);
@@ -126,10 +145,53 @@ public class LoginActivity extends AppCompatActivity {
 //                        onLoginSuccess(c, intent);
 //                }
             }
+
+            private boolean checkPasswordValidity(String password) {
+                if (password != User.calculateHash(Login_EDT_password.getText().toString())){
+                    return false;
+                }
+                return true;
+            }
+
+            private PublicKey readPublic(String publicKey) {
+                KeyFactory keyFactory = null;
+                try {
+                    keyFactory = KeyFactory.getInstance("RSA");
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
+                X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKey.getBytes());
+                PublicKey pk = null;
+                try {
+                    pk = keyFactory.generatePublic(publicKeySpec);
+                } catch (InvalidKeySpecException e) {
+                    e.printStackTrace();
+                }
+                return pk;
+
+            }
+
+            private PrivateKey readPrivate(String privateKey) {
+                KeyFactory keyFactory = null;
+                try {
+                    keyFactory = KeyFactory.getInstance("RSA");
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
+                X509EncodedKeySpec privateKeySpec = new X509EncodedKeySpec(privateKey.getBytes());
+                PrivateKey pk = null;
+                try {
+                    pk = keyFactory.generatePrivate(privateKeySpec);
+                } catch (InvalidKeySpecException e) {
+                    e.printStackTrace();
+                }
+                return pk;
+            }
+
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-//                onLoginFailed();
+                onLoginFailed();
             }
         });
         requestQueue.add(jsonObjectRequest);
@@ -137,30 +199,33 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-
-
-
-    // use Jackson to convert JSON to Object
-    private <T> T unmarshal(String json, Class<T> type) {
-        try {
-            //jackson.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-            //System.out.println("in unmarshal " + json.toString());
-            return this.jackson.readValue(json, type);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    private void onLoginFailed() {
+        Toast.makeText(getBaseContext(), "Failed to Login" , Toast.LENGTH_LONG).show();
     }
 
-    private String marshal(Object moreDetails) {
-        try {
-            //jackson.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-            //System.out.println("in marshal " + moreDetails.toString());
-            return this.jackson.writeValueAsString(moreDetails.toString());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
+
+//    // use Jackson to convert JSON to Object
+//    private <T> T unmarshal(String json, Class<T> type) {
+//        try {
+//            //jackson.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+//            //System.out.println("in unmarshal " + json.toString());
+//            return this.jackson.readValue(json, type);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+//
+//    private String marshal(Object moreDetails) {
+//        try {
+//            //jackson.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+//            //System.out.println("in marshal " + moreDetails.toString());
+//            return this.jackson.writeValueAsString(moreDetails.toString());
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+//
 
     boolean isEmail(EditText text) {
         CharSequence email = text.getText().toString();

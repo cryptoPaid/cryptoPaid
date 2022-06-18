@@ -59,7 +59,19 @@
     </option>
     <option name="selectedLicences">
       <map>
+        <entry key="Apache-2.0" value="true" />
+        <entry key="BSD" value="true" />
+        <entry key="Bouncy-Castle" value="true" />
+        <entry key="CDDL-1.0" value="true" />
+        <entry key="CDDL-1.1" value="true" />
+        <entry key="EPL-1.0" value="true" />
+        <entry key="GPL-2.0" value="true" />
+        <entry key="LGPL-2.1" value="true" />
+        <entry key="LGPL-3.0" value="true" />
+        <entry key="MIT" value="true" />
+        <entry key="Public Domain" value="true" />
         <entry key="Unknown" value="true" />
+        <entry key="Xnet" value="true" />
       </map>
     </option>
     <option name="selectedScopes">

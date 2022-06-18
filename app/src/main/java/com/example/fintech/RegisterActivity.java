@@ -97,7 +97,7 @@ public class RegisterActivity extends AppCompatActivity {
                 email = Register_EDT_email.getText().toString();
                 firstName = Register_EDT_first.getText().toString();
                 lastName = Register_EDT_last.getText().toString();
-                password = Register_EDT_password.getText().toString();
+                password = User.calculateHash(Register_EDT_password.getText().toString());
                 if(checkValidity()){
 //                    createUser();
                     Log.d("stas", user.toString());
@@ -261,9 +261,9 @@ public class RegisterActivity extends AppCompatActivity {
 /**********************
             READ KEYS FROM SEREVR
 
- //        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-//        X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(bytes);
-//        PublicKey pk = keyFactory.generatePublic(publicKeySpec);
+         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(bytes);
+        PublicKey pk = keyFactory.generatePublic(publicKeySpec);
  ****************************/
 
         Transaction tr1 = new Transaction("ADDRESS1","ADDRES2", 150);
@@ -281,7 +281,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         ArrayList<Block> blockchain =new ArrayList<>();
         blockchain.add(myblock);
-        blockchain.add(myblock2);
+//        blockchain.add(myblock2);
 
         //User user = new User("stas.krot1996@gmail.com", "MANAGER", "Demo User","451451dvd");
         //UserId userId = new UserId("2021b.johny.stas","stas.krot1996@gmail.com");
@@ -300,7 +300,7 @@ public class RegisterActivity extends AppCompatActivity {
             js.put("username",user.getEmail());
             js.put("password",user.getPassword());
 
-
+            /*********   PUT GENESIS BLOCK  ***********/
             blockjs.put("timestamp", blockchain.get(0).getTimestamp());
             blockjs.put("data", blockchain.get(0).getData());
             blockjs.put("hash", blockchain.get(0).getHash());
@@ -308,13 +308,13 @@ public class RegisterActivity extends AppCompatActivity {
             blockjs.put("nonce", 0);
             blocks.put(blockjs);
 //            blockChainJs.put("list", blockjs);
-
-            blockjs2.put("timestamp", blockchain.get(1).getTimestamp());
-            blockjs2.put("data", blockchain.get(1).getData());
-            blockjs2.put("hash", blockchain.get(1).getHash());
-            blockjs2.put("prevHash", blockchain.get(1).getPreviousHash());
-            blockjs2.put("nonce", 0);
-            blocks.put(blockjs2);
+//
+//            blockjs2.put("timestamp", blockchain.get(1).getTimestamp());
+//            blockjs2.put("data", blockchain.get(1).getData());
+//            blockjs2.put("hash", blockchain.get(1).getHash());
+//            blockjs2.put("prevHash", blockchain.get(1).getPreviousHash());
+//            blockjs2.put("nonce", 0);
+//            blocks.put(blockjs2);
 //
             blockChainJs.put("miningReward", user.getJohnstaCoin().getMiningReward());
             blockChainJs.put("difficulty", user.getJohnstaCoin().getDifficulty());
