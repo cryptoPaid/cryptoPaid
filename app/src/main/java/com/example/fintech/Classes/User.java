@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class User {
 
@@ -16,6 +17,7 @@ public class User {
     private String lastName;
     private BlockChain johnstaCoin;
     private ArrayList<Transaction> pendingTransaction;
+    private HashMap<String, String> publicList;
 
 
 
@@ -32,6 +34,7 @@ public class User {
         this.lastName = lastName;
         this.johnstaCoin = johnstaCoin;
         this.pendingTransaction = pendingTransaction;
+        this.publicList = new HashMap<>();
     }
 
     public User(String username, String password, String email, Wallet wallet, String firstName, String lastName) {
@@ -154,4 +157,7 @@ public class User {
     }
 
 
+    public HashMap<String, String> getPublicList() {
+        return publicList;
+    }
 }

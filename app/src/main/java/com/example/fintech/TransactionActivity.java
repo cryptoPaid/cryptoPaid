@@ -120,6 +120,7 @@ public class TransactionActivity extends AppCompatActivity {
 
             Log.d("stas", "address: " + transaction_EDT_address.getText().toString());
             Log.d("stas", "amount " + transaction_EDT_amount.getText().toString());
+
         }else if(transaction_SPNR_transType.getSelectedItem().toString().equals("Contract")){
 
             // TODO: 16/04/2022

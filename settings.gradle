@@ -1,2 +1,2 @@
-include ':app'//, ':library'
-rootProject.name = "Fintech"
+include ':app'
+rootProject.name = "cryptoPaid"
