@@ -19,6 +19,10 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout main_LAY_update;
     private RelativeLayout main_LAY_create;
     private RelativeLayout main_LAY_Settings;
+    private String username;
+    private String role;
+    byte[] publicKey;
+    byte[] privateKey;
 
 
     @Override
@@ -32,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
         main_LAY_update.setOnClickListener(changeActivity);
         main_LAY_create.setOnClickListener(changeActivity);
         main_LAY_Settings.setOnClickListener(changeActivity);
+//        username = this.getIntent().getStringExtra("username");
+//        role = this.getIntent().getStringExtra("role");
+//        publicKey = this.getIntent().getStringExtra("publicKey").getBytes();
+//        privateKey = this.getIntent().getStringExtra("privateKey").getBytes();
     }
 
 
@@ -42,6 +50,10 @@ public class MainActivity extends AppCompatActivity {
                 settingActivity();
             } else if ((view.getTag().toString().equals("create"))) {
                 Intent intent = new Intent(MainActivity.this, TransactionActivity.class);
+                intent.putExtra("role", role);
+                intent.putExtra("username", username);
+                intent.putExtra("publicKey", publicKey.toString());
+                intent.putExtra("privateKey", privateKey.toString());
                 startActivity(intent);
             } else if ((view.getTag().toString().equals("update"))) {
 //            Intent intent = new Intent(this, RegisterActivity.class);

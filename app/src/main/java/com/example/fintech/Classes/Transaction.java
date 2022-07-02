@@ -9,6 +9,7 @@ public class Transaction {
     private String toAddress;
     private String fromAddress;
     private String hash;
+    private int id = 0;
 
 
     public Transaction(String fromAddress,String toAddress,double amount) {
@@ -16,6 +17,7 @@ public class Transaction {
         this.toAddress = toAddress;
         this.amount = amount;
         this.hash = calculateHash(this);
+        this.id = id++;
     }
 
     public static String calculateHash(Transaction transaction) {
@@ -52,4 +54,6 @@ public class Transaction {
     public String getFromAddress() {
         return fromAddress;
     }
+
+    public int getId(){ return id; }
 }
