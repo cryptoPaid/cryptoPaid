@@ -254,7 +254,8 @@ public class RegisterActivity extends AppCompatActivity {
     ////////// TEST FOR USER API ///////////////
     private void postRequest() throws NoSuchAlgorithmException, InvalidKeySpecException {
         generateKeys();
-        user = new User("stas.krot1996@gmail.com","Password1","stas.krot1996@gmail.com","MANAGER" ,new Wallet(privateKey,publicKey,1000),"stas","krot", new BlockChain(), new ArrayList<>());
+        BlockChain bc = new BlockChain();
+        user = new User("stas.krot1996@gmail.com","Password1","stas.krot1996@gmail.com","MANAGER" ,new Wallet(privateKey,publicKey,1000),"stas","krot", bc, new ArrayList<>());
         byte[] publicEncode = publicKey.getEncoded();
         byte[] privateEncode = privateKey.getEncoded();
 
@@ -265,22 +266,9 @@ public class RegisterActivity extends AppCompatActivity {
         X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(bytes);
         PublicKey pk = keyFactory.generatePublic(publicKeySpec);
  ****************************/
-
-        Transaction tr1 = new Transaction("ADDRESS1","ADDRES2", 150);
-        Transaction tr2 = new Transaction("ADDRESS3","ADDRES4", 250);
-
-        ArrayList<Transaction> block1 =new ArrayList<>();
-        block1.add(tr1);
-        ArrayList<Transaction> block2 =new ArrayList<>();
-        block2.add(tr2);
-//        block.add(tr2);
-
-        Block myblock = new Block(new Timestamp(System.currentTimeMillis()), block1, "0");
-        Block myblock2 = new Block(new Timestamp(System.currentTimeMillis()), block2, myblock.getHash());
-
-
-        ArrayList<Block> blockchain =new ArrayList<>();
-        blockchain.add(myblock);
+//        Block myblock = new Block(new Timestamp(System.currentTimeMillis()), block1, "0");
+//        ArrayList<Block> blockchain =new ArrayList<>();
+//        blockchain.add(myblock);
 //        blockchain.add(myblock2);
 
         //User user = new User("stas.krot1996@gmail.com", "MANAGER", "Demo User","451451dvd");
@@ -301,10 +289,10 @@ public class RegisterActivity extends AppCompatActivity {
             js.put("password",user.getPassword());
 
             /*********   PUT GENESIS BLOCK  ***********/
-            blockjs.put("timestamp", blockchain.get(0).getTimestamp());
-            blockjs.put("data", blockchain.get(0).getData());
-            blockjs.put("hash", blockchain.get(0).getHash());
-            blockjs.put("prevHash", blockchain.get(0).getPreviousHash());
+            blockjs.put("timestamp", bc.getChain().get(0).getTimestamp());
+            blockjs.put("data", bc.getChain().get(0).getData());
+            blockjs.put("hash", bc.getChain().get(0).getHash());
+            blockjs.put("prevHash", bc.getChain().get(0).getPreviousHash());
             blockjs.put("nonce", 0);
             blocks.put(blockjs);
 //            blockChainJs.put("list", blockjs);

@@ -25,6 +25,7 @@ import com.example.fintech.Classes.User;
 import com.example.fintech.Classes.UserId;
 import com.google.android.material.button.MaterialButton;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,7 +38,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TransactionActivity extends AppCompatActivity {
-//    private ArrayList<Transaction> pendingTransaction = new ArrayList<>();
+    //    private ArrayList<Transaction> pendingTransaction = new ArrayList<>();
     private Spinner transaction_SPNR_transType;
     private Button transaction_BTN_create;
     private Spinner transaction_SPNR_contractType;
@@ -45,8 +46,9 @@ public class TransactionActivity extends AppCompatActivity {
     private EditText transaction_EDT_amount;
     BlockChain johnstaCoin = new BlockChain();
     ArrayList<Transaction> pendingTransaction = new ArrayList<>();
+    HashMap<String, JSONObject> myJson = new HashMap<>();
 
-    private String username;
+    private String username = "stas";
     private String role;
     byte[] encodePublicKey;
     byte[] encodePrivateKey;
@@ -66,10 +68,10 @@ public class TransactionActivity extends AppCompatActivity {
         contractAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         transaction_SPNR_contractType.setAdapter(contractAdapter);
         transaction_SPNR_contractType.setOnItemSelectedListener(onContextItemSelected);
-        username = this.getIntent().getStringExtra("username");
-        role = this.getIntent().getStringExtra("role");
-        encodePublicKey = this.getIntent().getStringExtra("publicKey").getBytes();
-        encodePrivateKey = this.getIntent().getStringExtra("privateKey").getBytes();
+//        username = this.getIntent().getStringExtra("username");
+//        role = this.getIntent().getStringExtra("role");
+//        encodePublicKey = this.getIntent().getStringExtra("publicKey").getBytes();
+//        encodePrivateKey = this.getIntent().getStringExtra("privateKey").getBytes();
 //        postRequest();
 
 //
@@ -125,8 +127,10 @@ public class TransactionActivity extends AppCompatActivity {
 
     private void createTransaction() {
         if(transaction_SPNR_transType.getSelectedItem().toString().equals("Money")){
-            johnstaCoin.createTransaction(new Transaction(username, transaction_EDT_address.getText().toString(), Integer.parseInt(transaction_EDT_amount.getText().toString())), pendingTransaction);
-
+            StringBuffer sb = new StringBuffer("Sending ");
+            sb.append(transaction_EDT_amount.getText().toString() + " " + "to " + transaction_EDT_address.getText().toString());
+            johnstaCoin.createTransaction(new Transaction(username, transaction_EDT_address.getText().toString(), Integer.parseInt(transaction_EDT_amount.getText().toString()), false , sb.toString() ,new Timestamp(System.currentTimeMillis())), pendingTransaction);
+            Log.d("stas", sb.toString());
 
             Log.d("stas", "address: " + transaction_EDT_address.getText().toString());
             Log.d("stas", "amount " + transaction_EDT_amount.getText().toString());
@@ -137,10 +141,10 @@ public class TransactionActivity extends AppCompatActivity {
 
             // TODO: 16/04/2022
             /*
-            *  GET PRIVATE KEY FROM USER
-            *  GET BLOCKCHAIN FROM USER
-            *  GET USER PENDING TRANSACTIONS
-            * */
+             *  GET PRIVATE KEY FROM USER
+             *  GET BLOCKCHAIN FROM USER
+             *  GET USER PENDING TRANSACTIONS
+             * */
 
 //            johnstaCoin.createTransaction(new Transaction("address1", transaction_EDT_amount.getText().toString(), Double.parseDouble(transaction_EDT_amount.getText().toString())), pendingTransaction);
 
@@ -192,28 +196,28 @@ public class TransactionActivity extends AppCompatActivity {
 
         String url = "http://192.168.137.1:8050/blockchain/items/2021b.johny.stas/" + username;
         JSONObject js = new JSONObject();
-        JSONObject transactionJs = new JSONObject();
         JSONObject itemIdJs = new JSONObject();
-//        JSONObject createdJs = new JSONObject();
-//        JSONObject userIdJs = new JSONObject();
-//        JSONObject userDetailIdJs = new JSONObject();
-//        JSONObject locationJs = new JSONObject();
-//        JSONObject itemAttJs = new JSONObject();
+        JSONArray tranJS = new JSONArray();
 
         try {
-
             for (int i=0; i < pendingTransaction.size(); i++){
+                JSONObject transactionJs = new JSONObject();
                 itemIdJs.put("space","2021b.johny.stas");
                 itemIdJs.put("id",pendingTransaction.get(i).getId());
-                transactionJs.put("itemId", itemIdJs.toString());
-//                transactionJs.put("createdTimestamp", pendingTransaction.get(i).get)
-
-
-
+                transactionJs.put("itemId", itemIdJs);
+                transactionJs.put("type","transaction");
+                transactionJs.put("name", pendingTransaction.get(i).getName());
+                transactionJs.put("active",pendingTransaction.get(i).getActive());
+                transactionJs.put("amount",pendingTransaction.get(i).getAmount());
+                transactionJs.put("toAddress",pendingTransaction.get(i).getToAddress());
+                transactionJs.put("fromAddress",pendingTransaction.get(i).getFromAddress());
+                transactionJs.put("createdTimestamp", pendingTransaction.get(i).getTimestamp());
+                transactionJs.put("hash",pendingTransaction.get(i).getHash());
+                tranJS.put(transactionJs);
             }
-
+            js.put("pendingTransaction",tranJS);
             Log.d("stas", js.toString());
-
+            Log.d("stas", pendingTransaction.size()+"");
 
         } catch (JSONException e) {
             e.printStackTrace();

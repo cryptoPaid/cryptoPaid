@@ -3,6 +3,7 @@ package com.example.fintech.Classes;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 
 public class Transaction {
     private double amount;
@@ -10,14 +11,20 @@ public class Transaction {
     private String fromAddress;
     private String hash;
     private int id = 0;
+    private boolean active;
+    private String name;
+    private Date timestamp;
 
 
-    public Transaction(String fromAddress,String toAddress,double amount) {
+    public Transaction(String fromAddress,String toAddress,double amount, boolean active, String name, Date timestamp) {
         this.fromAddress = fromAddress;
         this.toAddress = toAddress;
         this.amount = amount;
         this.hash = calculateHash(this);
         this.id = id++;
+        this.active = active;
+        this.name = name;
+        this.timestamp = timestamp;
     }
 
     public static String calculateHash(Transaction transaction) {
@@ -56,4 +63,16 @@ public class Transaction {
     }
 
     public int getId(){ return id; }
+
+    public boolean getActive(){ return active; }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public String getName(){ return name; }
+
+    public Date getTimestamp(){ return timestamp;}
+
+
 }

@@ -56,8 +56,9 @@ public class BlockChain {
         return chain;
     }
 
-    public void miningPendingTransaction(String miningRewardAddress, ArrayList<Transaction> pendingTransaction) {
-        Transaction rewardTx = new Transaction("REWARD", miningRewardAddress, this.miningReward);
+    public void miningPendingTransaction(String miningRewardAddress, ArrayList<Transaction> pendingTransaction, String name, Date timestamp) {
+        Transaction rewardTx = new Transaction("REWARD", miningRewardAddress, this.miningReward, true, name, timestamp);
+
         pendingTransaction.add(rewardTx);
         Block block = new Block(new Timestamp(System.currentTimeMillis()), pendingTransaction, this.getLatestBlock().getHash());
         block.mineBlock(this.difficulty);

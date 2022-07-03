@@ -50,10 +50,10 @@ public class MainActivity extends AppCompatActivity {
                 settingActivity();
             } else if ((view.getTag().toString().equals("create"))) {
                 Intent intent = new Intent(MainActivity.this, TransactionActivity.class);
-                intent.putExtra("role", role);
-                intent.putExtra("username", username);
-                intent.putExtra("publicKey", publicKey.toString());
-                intent.putExtra("privateKey", privateKey.toString());
+//                intent.putExtra("role", role);
+//                intent.putExtra("username", username);
+//                intent.putExtra("publicKey", publicKey.toString());
+//                intent.putExtra("privateKey", privateKey.toString());
                 startActivity(intent);
             } else if ((view.getTag().toString().equals("update"))) {
 //            Intent intent = new Intent(this, RegisterActivity.class);
