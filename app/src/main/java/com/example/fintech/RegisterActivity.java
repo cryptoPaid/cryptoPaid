@@ -273,7 +273,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         //User user = new User("stas.krot1996@gmail.com", "MANAGER", "Demo User","451451dvd");
         //UserId userId = new UserId("2021b.johny.stas","stas.krot1996@gmail.com");
-        String url = "http://192.168.1.211:8050/blockchain/users/";
+        String url = "http://192.168.1.223:8050/blockchain/users/";
         JSONObject js = new JSONObject();
         JSONObject walletJs = new JSONObject();
         JSONObject blockjs = new JSONObject();
@@ -308,7 +308,7 @@ public class RegisterActivity extends AppCompatActivity {
             blockChainJs.put("difficulty", user.getJohnstaCoin().getDifficulty());
 ////            blockChainJs.put("list1", blockjs);
             blockChainJs.put("chain", blocks);
-            js.put("johnStaCoin", blockChainJs);
+            js.put("johnStaCoin", blockChainJs.toString());
 
 //
             walletJs.put("publicKey", publicEncode.toString());

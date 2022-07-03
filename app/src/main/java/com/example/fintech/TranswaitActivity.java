@@ -2,6 +2,7 @@ package com.example.fintech;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -94,31 +95,31 @@ public class TranswaitActivity extends AppCompatActivity {
             public void onResponse(JSONObject response) {
 
 //                 Loop through the array elements
-                for(int i=0;i<response.length();i++){
-                    try {
-                        JSONObject pendingTransactionsJs = response.getJSONObject("pendingTransaction");
-                        String date = pendingTransactionsJs.getString("createdTimestamp");
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        Date timeStamp = null;
-                        try {
-                            timeStamp = sdf.parse(date);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        Transaction tr = new Transaction(pendingTransactionsJs.getString("fromAddress"),
-                                pendingTransactionsJs.getString("toAddress"),
-                                pendingTransactionsJs.getDouble("amount"),
-                                pendingTransactionsJs.getBoolean("active"),
-                                pendingTransactionsJs.getString("name"),
-                                timeStamp
-                                );
-                        pendingTransaction.add(tr);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-
-                }
+//                for(int i=0;i<response.length();i++){
+//                    try {
+//                        JSONObject pendingTransactionsJs = response.getJSONObject("pendingTransaction");
+//                        String date = pendingTransactionsJs.getString("createdTimestamp");
+//                        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss");
+//                        Date timeStamp = null;
+//                        try {
+//                            timeStamp = sdf.parse(date);
+//                        } catch (ParseException e) {
+//                            e.printStackTrace();
+//                        }
+//                        Transaction tr = new Transaction(pendingTransactionsJs.getString("fromAddress"),
+//                                pendingTransactionsJs.getString("toAddress"),
+//                                pendingTransactionsJs.getDouble("amount"),
+//                                pendingTransactionsJs.getBoolean("active"),
+//                                pendingTransactionsJs.getString("name"),
+//                                timeStamp
+//                                );
+//                        pendingTransaction.add(tr);
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//
+//                }
 
 //                        Log.d("ptt",c.toString());
 ////                        Intent intent = new Intent(LoginActivity.this, StartUpActivity.class);

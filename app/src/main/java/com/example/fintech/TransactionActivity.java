@@ -2,6 +2,7 @@ package com.example.fintech;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,8 +33,13 @@ import org.json.JSONObject;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Timestamp;
+
+
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+//import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,7 +54,7 @@ public class TransactionActivity extends AppCompatActivity {
     ArrayList<Transaction> pendingTransaction = new ArrayList<>();
     HashMap<String, JSONObject> myJson = new HashMap<>();
 
-    private String username = "stas";
+    private String username = "stas.krot1996@gmail.com";
     private String role;
     byte[] encodePublicKey;
     byte[] encodePrivateKey;
@@ -129,8 +135,19 @@ public class TransactionActivity extends AppCompatActivity {
         if(transaction_SPNR_transType.getSelectedItem().toString().equals("Money")){
             StringBuffer sb = new StringBuffer("Sending ");
             sb.append(transaction_EDT_amount.getText().toString() + " " + "to " + transaction_EDT_address.getText().toString());
-            johnstaCoin.createTransaction(new Transaction(username, transaction_EDT_address.getText().toString(), Integer.parseInt(transaction_EDT_amount.getText().toString()), false , sb.toString() ,new Timestamp(System.currentTimeMillis())), pendingTransaction);
-            Log.d("stas", sb.toString());
+//            String date = new Timestamp(System.currentTimeMillis()+"");
+
+//            @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//            Date timeStamp = null;
+//            try {
+//                timeStamp = sdf.parse(date);
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//            Log.d("mytransaction", timeStamp + "");
+
+            johnstaCoin.createTransaction(new Transaction(username, transaction_EDT_address.getText().toString(), Integer.parseInt(transaction_EDT_amount.getText().toString()), false , sb.toString(), new Date(System.currentTimeMillis())), pendingTransaction);
+            Log.d("stas", new Date(System.currentTimeMillis()) + "");
 
             Log.d("stas", "address: " + transaction_EDT_address.getText().toString());
             Log.d("stas", "amount " + transaction_EDT_amount.getText().toString());
@@ -194,30 +211,30 @@ public class TransactionActivity extends AppCompatActivity {
     ////////// TEST FOR USER API ///////////////
     private void postTransaction() {
 
-        String url = "http://192.168.137.1:8050/blockchain/items/2021b.johny.stas/" + username;
+        String url = "http://192.168.1.223:8050/blockchain/items/2021b.johny.stas/" + username;
         JSONObject js = new JSONObject();
         JSONObject itemIdJs = new JSONObject();
-        JSONArray tranJS = new JSONArray();
+//        JSONArray tranJS = new JSONArray();
 
         try {
-            for (int i=0; i < pendingTransaction.size(); i++){
+//            for (int i=0; i < pendingTransaction.size(); i++){
                 JSONObject transactionJs = new JSONObject();
                 itemIdJs.put("space","2021b.johny.stas");
-                itemIdJs.put("id",pendingTransaction.get(i).getId());
-                transactionJs.put("itemId", itemIdJs);
-                transactionJs.put("type","transaction");
-                transactionJs.put("name", pendingTransaction.get(i).getName());
-                transactionJs.put("active",pendingTransaction.get(i).getActive());
-                transactionJs.put("amount",pendingTransaction.get(i).getAmount());
-                transactionJs.put("toAddress",pendingTransaction.get(i).getToAddress());
-                transactionJs.put("fromAddress",pendingTransaction.get(i).getFromAddress());
-                transactionJs.put("createdTimestamp", pendingTransaction.get(i).getTimestamp());
-                transactionJs.put("hash",pendingTransaction.get(i).getHash());
-                tranJS.put(transactionJs);
-            }
-            js.put("pendingTransaction",tranJS);
-            Log.d("stas", js.toString());
-            Log.d("stas", pendingTransaction.size()+"");
+                itemIdJs.put("id",pendingTransaction.get(0).getId());
+                js.put("itemId", itemIdJs);
+                js.put("type","transaction");
+                js.put("name", pendingTransaction.get(0).getName());
+                js.put("active",pendingTransaction.get(0).getActive());
+                js.put("amount",pendingTransaction.get(0).getAmount());
+                js.put("toAddress",pendingTransaction.get(0).getToAddress());
+                js.put("fromAddress",pendingTransaction.get(0).getFromAddress());
+                js.put("createdTimestamp", pendingTransaction.get(0).getTimestamp());
+                js.put("hash",pendingTransaction.get(0).getHash());
+//                tranJS.put(transactionJs);
+//            }
+//            js.put("pendingTransaction",tranJS);
+            Log.d("mytransaction", js.toString());
+            Log.d("mytransaction", pendingTransaction.size()+"");
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -227,15 +244,15 @@ public class TransactionActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("transaction", "response: " + response.toString());
+                        Log.d("mytransaction", "response: " + response.toString());
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("transaction", "Error: " + error.getMessage());
+                Log.d( "mytransaction", "Error: " + error.getMessage());
                 try {
                     byte[] htmlBodyBytes = error.networkResponse.data;
-                    Log.e("transaction", new String(htmlBodyBytes), error);
+                    Log.e("mytransaction", new String(htmlBodyBytes), error);
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
