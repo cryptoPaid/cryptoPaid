@@ -255,7 +255,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void postRequest() throws NoSuchAlgorithmException, InvalidKeySpecException {
         generateKeys();
         BlockChain bc = new BlockChain();
-        user = new User("stas.krot1996@gmail.com","Password1","stas.krot1996@gmail.com","MANAGER" ,new Wallet(privateKey,publicKey,1000),"stas","krot", bc, new ArrayList<>());
+        user = new User("stas.krot1996@gmail.com","Password1","stas.krot1996@gmail.com","MANAGER" ,new Wallet(privateKey,publicKey,1000),"Johny","Arami", bc, new ArrayList<>());
         byte[] publicEncode = publicKey.getEncoded();
         byte[] privateEncode = privateKey.getEncoded();
 

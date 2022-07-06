@@ -31,10 +31,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.math.BigInteger;
+import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 
+import java.security.SignatureException;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -125,13 +127,21 @@ public class TransactionActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             if(v.getTag().toString().equals("create")){
-                createTransaction();
+                try {
+                    createTransaction();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (InvalidKeyException e) {
+                    e.printStackTrace();
+                } catch (SignatureException e) {
+                    e.printStackTrace();
+                }
             }
 
         }
     };
 
-    private void createTransaction() {
+    private void createTransaction() throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
         if(transaction_SPNR_transType.getSelectedItem().toString().equals("Money")){
             StringBuffer sb = new StringBuffer("Sending ");
             sb.append(transaction_EDT_amount.getText().toString() + " " + "to " + transaction_EDT_address.getText().toString());
@@ -146,7 +156,15 @@ public class TransactionActivity extends AppCompatActivity {
 //            }
 //            Log.d("mytransaction", timeStamp + "");
 
-            johnstaCoin.createTransaction(new Transaction(username, transaction_EDT_address.getText().toString(), Integer.parseInt(transaction_EDT_amount.getText().toString()), false , sb.toString(), new Date(System.currentTimeMillis())), pendingTransaction);
+            johnstaCoin.createTransaction(new Transaction(username, "yonatani94@gmail.com", 10, false , sb.toString(), new Date(System.currentTimeMillis())), pendingTransaction);
+            johnstaCoin.miningPendingTransaction(username,pendingTransaction, sb.toString(), new Date(System.currentTimeMillis()));
+            // TODO: 7/6/2022
+            /*****************
+             *
+             * POST UPDATE USER WITH NEW BLOCKCHAIN
+             *
+             *
+             * *****************/
             Log.d("stas", new Date(System.currentTimeMillis()) + "");
 
             Log.d("stas", "address: " + transaction_EDT_address.getText().toString());
@@ -220,16 +238,17 @@ public class TransactionActivity extends AppCompatActivity {
 //            for (int i=0; i < pendingTransaction.size(); i++){
                 JSONObject transactionJs = new JSONObject();
                 itemIdJs.put("space","2021b.johny.stas");
-                itemIdJs.put("id",pendingTransaction.get(0).getId());
+                itemIdJs.put("id",pendingTransaction.get(pendingTransaction.size()-1).getId());
                 js.put("itemId", itemIdJs);
                 js.put("type","transaction");
-                js.put("name", pendingTransaction.get(0).getName());
-                js.put("active",pendingTransaction.get(0).getActive());
-                js.put("amount",pendingTransaction.get(0).getAmount());
-                js.put("toAddress",pendingTransaction.get(0).getToAddress());
-                js.put("fromAddress",pendingTransaction.get(0).getFromAddress());
-                js.put("createdTimestamp", pendingTransaction.get(0).getTimestamp());
-                js.put("hash",pendingTransaction.get(0).getHash());
+                js.put("name", pendingTransaction.get(pendingTransaction.size()-1).getName());
+                js.put("active",pendingTransaction.get(pendingTransaction.size()-1).getActive());
+                js.put("approve", false);
+                js.put("amount",pendingTransaction.get(pendingTransaction.size()-1).getAmount());
+                js.put("toAddress",pendingTransaction.get(pendingTransaction.size()-1).getToAddress());
+                js.put("fromAddress",pendingTransaction.get(pendingTransaction.size()-1).getFromAddress());
+                js.put("createdTimestamp", pendingTransaction.get(pendingTransaction.size()-1).getTimestamp());
+                js.put("hash",pendingTransaction.get(pendingTransaction.size()-1).getHash());
 //                tranJS.put(transactionJs);
 //            }
 //            js.put("pendingTransaction",tranJS);

@@ -6,6 +6,13 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.InvalidKeyException;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.Signature;
+import java.security.SignatureException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,13 +38,13 @@ public class BlockChain {
         return this.chain.get(this.chain.size() - 1);
     }
 
-    public void addBlock(Block newBlock) {
+    public void addBlock(Block newBlock) throws SignatureException, NoSuchAlgorithmException, InvalidKeyException {
         newBlock.setPreviousHash(this.getLatestBlock().getHash());
         newBlock.setHash(Block.calculateHash(newBlock));
         this.chain.add(newBlock);
     }
 
-    public boolean isChainValidate(ArrayList<Transaction> pendingTransaction) {
+    public boolean isChainValidate(ArrayList<Transaction> pendingTransaction) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
         for (int i = 1; i < this.chain.size(); i++) {
             Block currentBlock = this.chain.get(i);
             Block previousBlock = this.chain.get(i-1);
@@ -56,10 +63,12 @@ public class BlockChain {
         return chain;
     }
 
-    public void miningPendingTransaction(String miningRewardAddress, ArrayList<Transaction> pendingTransaction, String name, Date timestamp) {
+    public void miningPendingTransaction(String miningRewardAddress, ArrayList<Transaction> pendingTransaction, String name, Date timestamp) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
         Transaction rewardTx = new Transaction("REWARD", miningRewardAddress, this.miningReward, true, name, timestamp);
 
         pendingTransaction.add(rewardTx);
+//        signTransaction(pendingTransaction);
+
         Block block = new Block(new Timestamp(System.currentTimeMillis()), pendingTransaction, this.getLatestBlock().getHash());
         block.mineBlock(this.difficulty);
         Log.d("johny","Block successfully mined");
@@ -67,6 +76,42 @@ public class BlockChain {
         Log.d("johny", "is chain valid? " + this.isChainValidate(pendingTransaction));
        // Log.d("johny", "the chain is " + this.getChain());
     }
+
+//    private void signTransaction(ArrayList<Transaction> pendingTransaction) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+//        //Creating KeyPair generator object
+//        KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("DSA");
+//
+//        //Initializing the key pair generator
+//        keyPairGen.initialize(2048);
+//
+//        //Generate the pair of keys
+//        KeyPair pair = keyPairGen.generateKeyPair();
+//
+//        //Getting the private key from the key pair
+//        PrivateKey privKey = pair.getPrivate();
+//
+//        //Creating a Signature object
+//        Signature sign = Signature.getInstance("SHA256withDSA");
+//
+//        //Initialize the signature
+//        sign.initSign(privKey);
+//
+//        for (int i=0; i<pendingTransaction.size(); i++){
+//
+//
+//            byte[] bytes = "msg".getBytes();
+//
+//            //Adding data to the signature
+//            sign.update(bytes);
+//
+//            //Calculating the signature
+//            byte[] signature = sign.sign();
+//            pendingTransaction.get(i).set
+//
+//        }
+//
+//
+//    }
 
     public void createTransaction(Transaction transaction, ArrayList<Transaction> pendingTransaction) {
         pendingTransaction.add(transaction);
