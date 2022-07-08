@@ -9,10 +9,57 @@
     >
 
 
+
+<RelativeLayout
+    android:id="@+id/traswait_LAY_relative"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    >
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/traswait_LST_listView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:tag="list"
+
+        />
+
+    <Button
+        android:id="@+id/transwait_BTN_show"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:tag="list" />
+        android:text="SHOW"
+        android:tag="show"
+        android:layout_centerInParent="true"
+        android:visibility="visible"
+        >
+
+
+    </Button>
+    <Button
+        android:id="@+id/transwait_BTN_waiting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="waiting"
+        android:tag="waiting"
+        android:layout_centerInParent="true"
+        android:visibility="visible"
+        android:layout_below="@id/transwait_BTN_show"
+        android:layout_marginTop="15dp"
+        >
+
+
+    </Button>
+
+
+
+</RelativeLayout>
+
+
+
+
+
+
+
 
 </RelativeLayout>

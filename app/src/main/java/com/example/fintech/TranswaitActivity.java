@@ -14,6 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -61,55 +63,25 @@ import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 public class TranswaitActivity extends AppCompatActivity {
 
 //    private TableView transwait_TBL_table;
-//    private Button transwait_BTN_update;
-//    private Button transwait_BTN_waiting;
-//    private Button transwait_BTN_show;
-//    private LinearLayout transwait_LAY_button;
-//    private RecyclerView transwait_RCV_list;
-//    private LinearLayoutManager linearLayoutManager;
+    private Button transwait_BTN_waiting;
+    private Button transwait_BTN_show;
+
     private ArrayList<Transaction> pendingTransaction = new ArrayList<>();
     private LinearLayoutManager linearLayoutManager;
     private ViewAdapter viewAdapter;
     private RecyclerView traswait_LST_listView;
-//    private TransactionAdapter adapter;
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transwait);
-//        getTransactions();
         findViews();
-        try {
-            showTransactions("noactive");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (SignatureException e) {
-            e.printStackTrace();
-        }
 
-//        traswait_LST_listView.setOnClickListener(clicked);
-//        traswait_LST_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Transaction transaction = pendingTransaction.get(i);
-//
-//            }
-//        });
-//        transwait_RCV_list.setHasFixedSize(true);
-//        linearLayoutManager = new LinearLayoutManager(this);
-//        transwait_RCV_list.setLayoutManager(linearLayoutManager);
-//        transwait_BTN_update.setOnClickListener(clicked);
-//        transwait_BTN_waiting.setOnClickListener(clicked);
-//        transwait_BTN_show.setOnClickListener(clicked);
-//        transwait_LAY_button.setOnClickListener(clicked);
-
-        //getTransactions();
-
-//        showWaitingTransactions();
+        transwait_BTN_show.setVisibility(View.VISIBLE);
+        transwait_BTN_waiting.setVisibility(View.VISIBLE);
+        transwait_BTN_show.setOnClickListener(clicked);
+        transwait_BTN_waiting.setOnClickListener(clicked);
 
     }
 
@@ -118,12 +90,12 @@ public class TranswaitActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             Log.d("stas", v.getTag().toString());
-            if(v.getTag().toString().equals("update")){
-                updateTransaction();
-            }
-            else if(v.getTag().toString().equals("waiting")){
+            if(v.getTag().toString().equals("waiting")){
                 try {
                     showTransactions("noactive");
+                    transwait_BTN_waiting.setVisibility(View.INVISIBLE);
+                    transwait_BTN_show.setVisibility(View.INVISIBLE);
+
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 } catch (InvalidKeyException e) {
@@ -134,6 +106,8 @@ public class TranswaitActivity extends AppCompatActivity {
             }
             else if(v.getTag().toString().equals("show")){
                 try {
+                    transwait_BTN_waiting.setVisibility(View.INVISIBLE);
+                    transwait_BTN_show.setVisibility(View.INVISIBLE);
                     showTransactions("active");
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
@@ -148,114 +122,33 @@ public class TranswaitActivity extends AppCompatActivity {
         }
     };
 
-    private void updateTransaction() {
-        String email = "stas.krot1996@gmail.com";
-        String url = "http://192.168.1.223:8050/blockchain/items/2021b.johny.stas/stas.krot1996@gmail.com/2021b.johny.stas/1";
-        JSONObject js = new JSONObject();
-        JSONObject itemIdJs = new JSONObject();
-//        JSONArray tranJS = new JSONArray();
-
-        try {
-//            for (int i=0; i < pendingTransaction.size(); i++){
-            JSONObject transactionJs = new JSONObject();
-            itemIdJs.put("space","2021b.johny.stas");
-            itemIdJs.put("id",1);
-            js.put("itemId", itemIdJs);
-            js.put("type","transaction");
-            js.put("name", "sending 123 to XXX");
-            js.put("active",true);
-            js.put("approve", true);
-            js.put("amount",10);
-            js.put("toAddress","yonatani94@gmail.com");
-            js.put("fromAddress","stas.krot1996@gmail.com");
-            js.put("createdTimestamp", new Date(System.currentTimeMillis()));
-            js.put("hash","abcdefg");
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(
-                Request.Method.PUT, url, js,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        Log.d("pstt", response.toString() + " i am queen");
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-                Log.d("pstt", "Error: " + error.getMessage());
-                try {
-                    byte[] htmlBodyBytes = error.networkResponse.data;
-                    Log.e("stasptt", new String(htmlBodyBytes), error);
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                }
-            }
-        }) {
-            @Override
-            protected Map<String,String> getParams(){
-                Log.d("stas1","getting params");
-//                Gson gson = new Gson();
-//                String json = gson.toJson(account);
-                Map<String,String> params = new HashMap<String,String>();
-
-                Log.d("stas1","returned params");
-                return params;
-            }
-            @Override
-            public Map<String,String> getHeaders() throws AuthFailureError {
-                Map<String,String> params = new HashMap<String,String>();
-
-                params.put("Content-Type","application/json; charset=utf-8");
-                return params;
-            }
-        };
-
-        Volley.newRequestQueue(this).add(jsonObjReq);
-    }
 
 
 
 
     private void showTransactions(String option) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
 
-        for (int i=0; i<10; i++){
-            pendingTransaction.add(new Transaction("stas"+i,
-                    "johny_"+i,
-                    100*i,
-                    false ,
-                    "my Transaction_"+i ,
-                    new Timestamp(System.currentTimeMillis())));
-        }
-
-//        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, pendingTransaction);
-//        traswait_LST_listView.setAdapter(adapter);
-
-
-
-        getTransactions(option);
-//        transwait_TBL_table.setVisibility(View.VISIBLE);
-//        String[] headers = {"toAddress", "amount", "date"};
-//        transwait_TBL_table.setHeaderAdapter(new SimpleTableHeaderAdapter(this, headers));
-//        List<String[]> list = new ArrayList<>();
-//        for (int i=0; i<pendingTransaction.size(); i++){
-//            String[] myData = {pendingTransaction.get(i).getToAddress(),
-//                    String.valueOf(pendingTransaction.get(i).getAmount()),
-//                    pendingTransaction.get(i).getTimestamp().toString()};
-//            list.add(myData);
-//            transwait_TBL_table.setDataAdapter(new SimpleTableDataAdapter(this, list));
-
+//        for (int i=0; i<10; i++){
+//            pendingTransaction.add(new Transaction("stas"+i,
+//                    "johny_"+i,
+//                    100*i,
+//                    false ,
+//                    "my Transaction_"+i ,
+//                    new Timestamp(System.currentTimeMillis())));
 //        }
-
+        getTransactions(option);
 
     }
 
 
     private void getTransactions(String option) {
-        initAdapter();
+        if (option.equals("active")){
+            Log.d("pttt", option);
+            initAdapter(0);
+        } else if (option.equals("noactive")){
+            Log.d("pttt", option);
+            initAdapter(1);
+        }
         RequestQueue requestQueue = Volley.newRequestQueue(TranswaitActivity.this);
         String url = "http://10.0.0.4:8050/blockchain/items/2021b.johny.stas/stas.krot1996@gmail.com/"+option;
 
@@ -281,7 +174,7 @@ public class TranswaitActivity extends AppCompatActivity {
                         Date date = convetTime(timestamp);
 
                         Transaction tr = new Transaction(from,to,amount, active,name,date);
-
+                        pendingTransaction.add(tr);
 
 
                     } catch (JSONException e) {
@@ -315,21 +208,18 @@ public class TranswaitActivity extends AppCompatActivity {
         requestQueue.add(JsonArrayRequest);
     }
 
-    private void initAdapter() {
+    private void initAdapter(int visible) {
         Log.d("stas", "size " + pendingTransaction.size());
         linearLayoutManager = new LinearLayoutManager(TranswaitActivity.this);
         traswait_LST_listView.setLayoutManager(linearLayoutManager);
-        viewAdapter = new ViewAdapter(pendingTransaction);
+        viewAdapter = new ViewAdapter(pendingTransaction, visible);
         traswait_LST_listView.setAdapter(viewAdapter);
-
-//        adapter = new TransactionAdapter(this, R.layout.transaction_row_item, pendingTransaction);
-//        traswait_LST_listView.setAdapter(adapter);
-
     }
 
 
     private void findViews() {
-//        transwait_RCV_list = findViewById(R.id.transwait_RCV_list);
+        transwait_BTN_show = findViewById(R.id.transwait_BTN_show);
+        transwait_BTN_waiting = findViewById(R.id.transwait_BTN_waiting);
         traswait_LST_listView = findViewById(R.id.traswait_LST_listView);
         traswait_LST_listView.setHasFixedSize(true);
 
