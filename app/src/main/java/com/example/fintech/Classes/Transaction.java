@@ -107,5 +107,17 @@ public class Transaction {
 
     public Date getTimestamp(){ return timestamp;}
 
-
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "amount=" + amount +
+                ", toAddress='" + toAddress + '\'' +
+                ", fromAddress='" + fromAddress + '\'' +
+                ", hash='" + hash + '\'' +
+                ", id=" + id +
+                ", active=" + active +
+                ", name='" + name + '\'' +
+                ", timestamp=" + timestamp +
+                '}';
+    }
 }

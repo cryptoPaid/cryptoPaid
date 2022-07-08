@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    >
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            >
+
+            <Button
+                android:id="@+id/transaction_row_item_BTN_ming"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/transaction_row_item_LBL_title"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
+                android:text="MING"
+                android:tag="ming"
+                />
+            <TextView
+                android:id="@+id/transaction_row_item_LBL_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textStyle="bold"
+                android:layout_alignParentTop="true"
+                android:textSize="20sp"
+                android:layout_marginBottom="10dp"
+                />
+
+            <TextView
+                android:id="@+id/transaction_row_item_LBL_toAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:layout_below="@id/transaction_row_item_LBL_title"
+                android:textSize="15sp"
+                android:layout_marginBottom="5dp"
+                />
+
+            <TextView
+                android:id="@+id/transaction_row_item_LBL_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:layout_below="@id/transaction_row_item_LBL_toAddress"
+                android:textSize="15sp"
+                android:layout_marginBottom="5dp"
+
+                />
+            <TextView
+                android:id="@+id/transaction_row_item_LBL_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:layout_below="@id/transaction_row_item_LBL_amount"
+                android:textSize="15sp"
+                android:layout_marginBottom="5dp"
+
+                />
+
+
+
+
+        </RelativeLayout>
+
+
+
+
+
+    </androidx.cardview.widget.CardView>
+
+
+
+</LinearLayout>

@@ -1,14 +1,19 @@
 package com.example.fintech;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -22,7 +27,9 @@ import com.android.volley.toolbox.Volley;
 import com.example.fintech.Classes.BlockChain;
 import com.example.fintech.Classes.CustomJsonRequest;
 import com.example.fintech.Classes.Transaction;
+import com.example.fintech.Classes.TransactionAdapter;
 import com.example.fintech.Classes.User;
+import com.example.fintech.Classes.ViewAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,12 +60,18 @@ import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
 public class TranswaitActivity extends AppCompatActivity {
 
+//    private TableView transwait_TBL_table;
+//    private Button transwait_BTN_update;
+//    private Button transwait_BTN_waiting;
+//    private Button transwait_BTN_show;
+//    private LinearLayout transwait_LAY_button;
+//    private RecyclerView transwait_RCV_list;
+//    private LinearLayoutManager linearLayoutManager;
     private ArrayList<Transaction> pendingTransaction = new ArrayList<>();
-    private TableView table;
-    private Button transwait_BTN_update;
-    private Button transwait_BTN_waiting;
-    private Button transwait_BTN_show;
-    private LinearLayout transwait_LAY_button;
+    private LinearLayoutManager linearLayoutManager;
+    private ViewAdapter viewAdapter;
+    private RecyclerView traswait_LST_listView;
+//    private TransactionAdapter adapter;
 
 
 
@@ -68,18 +81,37 @@ public class TranswaitActivity extends AppCompatActivity {
         setContentView(R.layout.activity_transwait);
 //        getTransactions();
         findViews();
-        transwait_BTN_update.setOnClickListener(clicked);
-        transwait_BTN_waiting.setOnClickListener(clicked);
-        transwait_BTN_show.setOnClickListener(clicked);
-        transwait_LAY_button.setOnClickListener(clicked);
+        try {
+            showTransactions("noactive");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (SignatureException e) {
+            e.printStackTrace();
+        }
+
+//        traswait_LST_listView.setOnClickListener(clicked);
+//        traswait_LST_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                Transaction transaction = pendingTransaction.get(i);
+//
+//            }
+//        });
+//        transwait_RCV_list.setHasFixedSize(true);
+//        linearLayoutManager = new LinearLayoutManager(this);
+//        transwait_RCV_list.setLayoutManager(linearLayoutManager);
+//        transwait_BTN_update.setOnClickListener(clicked);
+//        transwait_BTN_waiting.setOnClickListener(clicked);
+//        transwait_BTN_show.setOnClickListener(clicked);
+//        transwait_LAY_button.setOnClickListener(clicked);
 
         //getTransactions();
 
 //        showWaitingTransactions();
 
     }
-
-
 
 
     private View.OnClickListener clicked = new View.OnClickListener() {
@@ -189,36 +221,41 @@ public class TranswaitActivity extends AppCompatActivity {
 
 
     private void showTransactions(String option) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
-//        for (int i=0; i<3; i++){
-//            pendingTransaction.add(new Transaction("stas"+i,
-//                    "johny_"+i,
-//                    100*i,
-//                    false ,
-//                    "my Transaction_"+i ,
-//                    new Timestamp(System.currentTimeMillis())));
-//        }
+
+        for (int i=0; i<10; i++){
+            pendingTransaction.add(new Transaction("stas"+i,
+                    "johny_"+i,
+                    100*i,
+                    false ,
+                    "my Transaction_"+i ,
+                    new Timestamp(System.currentTimeMillis())));
+        }
+
+//        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, pendingTransaction);
+//        traswait_LST_listView.setAdapter(adapter);
+
 
 
         getTransactions(option);
+//        transwait_TBL_table.setVisibility(View.VISIBLE);
+//        String[] headers = {"toAddress", "amount", "date"};
+//        transwait_TBL_table.setHeaderAdapter(new SimpleTableHeaderAdapter(this, headers));
+//        List<String[]> list = new ArrayList<>();
+//        for (int i=0; i<pendingTransaction.size(); i++){
+//            String[] myData = {pendingTransaction.get(i).getToAddress(),
+//                    String.valueOf(pendingTransaction.get(i).getAmount()),
+//                    pendingTransaction.get(i).getTimestamp().toString()};
+//            list.add(myData);
+//            transwait_TBL_table.setDataAdapter(new SimpleTableDataAdapter(this, list));
 
-        String[] headers = {"toAddress", "amount", "date"};
-        table.setHeaderAdapter(new SimpleTableHeaderAdapter(this, headers));
-        List<String[]> list = new ArrayList<>();
-        for (int i=0; i<pendingTransaction.size(); i++){
-            String[] myData = {pendingTransaction.get(i).getToAddress(),
-                    String.valueOf(pendingTransaction.get(i).getAmount()),
-                    pendingTransaction.get(i).getTimestamp().toString()};
-            list.add(myData);
-            table.setDataAdapter(new SimpleTableDataAdapter(this, list));
-
-        }
+//        }
 
 
     }
 
 
     private void getTransactions(String option) {
-
+        initAdapter();
         RequestQueue requestQueue = Volley.newRequestQueue(TranswaitActivity.this);
         String url = "http://10.0.0.4:8050/blockchain/items/2021b.johny.stas/stas.krot1996@gmail.com/"+option;
 
@@ -230,12 +267,7 @@ public class TranswaitActivity extends AppCompatActivity {
                 {
                     try {
 
-//            pendingTransaction.add(new Transaction("stas"+i,
-//                    "johny_"+i,
-//                    100*i,
-//                    false ,
-//                    "my Transaction_"+i ,
-//                    new Timestamp(System.currentTimeMillis())));
+
 
 
                         JSONObject transaction = response.getJSONObject(i);
@@ -283,13 +315,24 @@ public class TranswaitActivity extends AppCompatActivity {
         requestQueue.add(JsonArrayRequest);
     }
 
+    private void initAdapter() {
+        Log.d("stas", "size " + pendingTransaction.size());
+        linearLayoutManager = new LinearLayoutManager(TranswaitActivity.this);
+        traswait_LST_listView.setLayoutManager(linearLayoutManager);
+        viewAdapter = new ViewAdapter(pendingTransaction);
+        traswait_LST_listView.setAdapter(viewAdapter);
+
+//        adapter = new TransactionAdapter(this, R.layout.transaction_row_item, pendingTransaction);
+//        traswait_LST_listView.setAdapter(adapter);
+
+    }
+
 
     private void findViews() {
-        table = findViewById(R.id.transwait_TBL_table);
-        transwait_BTN_update = findViewById(R.id.transwait_BTN_update);
-        transwait_BTN_waiting = findViewById(R.id.transwait_BTN_waiting);
-        transwait_BTN_show = findViewById(R.id.transwait_BTN_show);
-        transwait_LAY_button = findViewById(R.id.transwait_LAY_button);
+//        transwait_RCV_list = findViewById(R.id.transwait_RCV_list);
+        traswait_LST_listView = findViewById(R.id.traswait_LST_listView);
+        traswait_LST_listView.setHasFixedSize(true);
+
     }
 
 

@@ -2,72 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     tools:context=".TranswaitActivity"
-    android:orientation="vertical"
+    android:background="#8B4C97EC"
     >
 
-    <de.codecrafters.tableview.TableView
-        android:id="@+id/transwait_TBL_table"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/traswait_LST_listView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </de.codecrafters.tableview.TableView>
-
-
-    <LinearLayout
-        android:id="@+id/transwait_LAY_button"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/transwait_TBL_table"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        >
-
-        <Button
-            android:id="@+id/transwait_BTN_update"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:tag="update"
-            android:layout_marginBottom="20dp"
-            android:text="Approve"
-            android:layout_weight="1"
-
-            >
-        </Button>
-
-        <Button
-            android:id="@+id/transwait_BTN_waiting"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:tag="waiting"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"
-            android:text="Wait"
-            android:layout_weight="1"
-
-            >
-        </Button>
-        <Button
-            android:id="@+id/transwait_BTN_show"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:tag="show"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"
-            android:text="Show All"
-            android:layout_weight="1"
-
-            >
-        </Button>
-
-    </LinearLayout>
-
-
-
-
-
+        android:tag="list" />
 
 </RelativeLayout>
