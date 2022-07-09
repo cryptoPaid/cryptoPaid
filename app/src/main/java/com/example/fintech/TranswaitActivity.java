@@ -62,7 +62,6 @@ import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
 public class TranswaitActivity extends AppCompatActivity {
 
-//    private TableView transwait_TBL_table;
     private Button transwait_BTN_waiting;
     private Button transwait_BTN_show;
     private Button transwait_BTN_approve;
@@ -72,15 +71,27 @@ public class TranswaitActivity extends AppCompatActivity {
     private ViewAdapter viewAdapter;
     private RecyclerView traswait_LST_listView;
 
+    private String username;
+    private String role;
+    double balance;
+    byte[] publicKey;
+    byte[] privateKey;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transwait);
+        role = getIntent().getStringExtra("role");
+        username = getIntent().getStringExtra("username");
+        publicKey = getIntent().getByteArrayExtra("publicKey");
+        privateKey = getIntent().getByteArrayExtra("privateKey");
+        balance = Double.parseDouble(getIntent().getStringExtra("balance"));
         findViews();
 
         transwait_BTN_show.setVisibility(View.VISIBLE);
         transwait_BTN_waiting.setVisibility(View.VISIBLE);
+        transwait_BTN_approve.setVisibility(View.VISIBLE);
         transwait_BTN_show.setOnClickListener(clicked);
         transwait_BTN_waiting.setOnClickListener(clicked);
         transwait_BTN_approve.setOnClickListener(clicked);
@@ -97,6 +108,9 @@ public class TranswaitActivity extends AppCompatActivity {
                     showTransactions("noactive");
                     transwait_BTN_waiting.setVisibility(View.INVISIBLE);
                     transwait_BTN_show.setVisibility(View.INVISIBLE);
+                    transwait_BTN_approve.setVisibility(View.INVISIBLE);
+
+
 
 
                 } catch (NoSuchAlgorithmException e) {
@@ -104,6 +118,8 @@ public class TranswaitActivity extends AppCompatActivity {
                 } catch (InvalidKeyException e) {
                     e.printStackTrace();
                 } catch (SignatureException e) {
+                    e.printStackTrace();
+                } catch (InvalidKeySpecException e) {
                     e.printStackTrace();
                 }
             }
@@ -111,6 +127,9 @@ public class TranswaitActivity extends AppCompatActivity {
                 try {
                     transwait_BTN_waiting.setVisibility(View.INVISIBLE);
                     transwait_BTN_show.setVisibility(View.INVISIBLE);
+                    transwait_BTN_approve.setVisibility(View.INVISIBLE);
+
+
                     showTransactions("active");
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
@@ -118,18 +137,24 @@ public class TranswaitActivity extends AppCompatActivity {
                     e.printStackTrace();
                 } catch (SignatureException e) {
                     e.printStackTrace();
+                } catch (InvalidKeySpecException e) {
+                    e.printStackTrace();
                 }
             }
             else if(v.getTag().toString().equals("approve")){
                 try {
                     transwait_BTN_waiting.setVisibility(View.INVISIBLE);
                     transwait_BTN_show.setVisibility(View.INVISIBLE);
+                    transwait_BTN_approve.setVisibility(View.INVISIBLE);
+
                     showTransactions("approve");
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 } catch (InvalidKeyException e) {
                     e.printStackTrace();
                 } catch (SignatureException e) {
+                    e.printStackTrace();
+                } catch (InvalidKeySpecException e) {
                     e.printStackTrace();
                 }
             }
@@ -142,19 +167,27 @@ public class TranswaitActivity extends AppCompatActivity {
 
 
 
-    private void showTransactions(String option) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+    private void showTransactions(String option) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException, InvalidKeySpecException {
 
-//        for (int i=0; i<10; i++){
-//            pendingTransaction.add(new Transaction("stas"+i,
-//                    "johny_"+i,
-//                    100*i,
-//                    false ,
-//                    "my Transaction_"+i ,
-//                    new Timestamp(System.currentTimeMillis())));
-//        }
-        getTransactions(option);
+        for (int i=0; i<10; i++){
+            pendingTransaction.add(new Transaction("stas"+i,
+                    "johny_"+i,
+                    100*i,
+                    true ,
+                    "my Transaction_"+i ,
+                    new Timestamp(System.currentTimeMillis()),privateKey, true));
+        }
 
-
+        Log.d("transateion",pendingTransaction.toString());
+        if (option.equals("active")){
+            Log.d("pttt", option);
+            initAdapter(0);
+        } else if (option.equals("noactive")){
+            Log.d("pttt", option);
+            initAdapter(1);
+        } else if (option.equals("approve")){
+            initAdapter(2);
+        }
     }
 
 
@@ -177,11 +210,12 @@ public class TranswaitActivity extends AppCompatActivity {
                         Boolean active = transaction.getBoolean("active");
                         String name = transaction.getString("name");
                         String timestamp = transaction.getString("createdTimestamp");
+                        boolean approve = transaction.getBoolean("approve");
                         JSONObject item = transaction.getJSONObject("itemId");
                         int id = item.getInt("id");
                    //     Date date = convetTime(timestamp);
 
-                        Transaction tr = new Transaction(id,from,to,amount, active,name,new Date(System.currentTimeMillis()));
+                        Transaction tr = new Transaction(id,from,to,amount, active,name,new Date(System.currentTimeMillis()), privateKey, approve);
                         pendingTransaction.add(tr);
 
 
@@ -192,6 +226,8 @@ public class TranswaitActivity extends AppCompatActivity {
                     } catch (SignatureException e) {
                         e.printStackTrace();
                     } catch (InvalidKeyException e) {
+                        e.printStackTrace();
+                    } catch (InvalidKeySpecException e) {
                         e.printStackTrace();
                     }
 

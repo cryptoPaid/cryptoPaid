@@ -13,6 +13,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,11 +52,11 @@ public class BlockChain {
         this.chain.add(newBlock);
     }
 
-    public boolean isChainValidate(ArrayList<Transaction> pendingTransaction) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+    public boolean isChainValidate(ArrayList<Transaction> pendingTransaction,byte[] privateKey) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException, InvalidKeySpecException {
         for (int i = 1; i < this.chain.size(); i++) {
             Block currentBlock = this.chain.get(i);
             Block previousBlock = this.chain.get(i-1);
-            if (!currentBlock.getTransaction().get(pendingTransaction.size()-1).getHash().equals(Transaction.calculateHash(currentBlock.getTransaction().get(pendingTransaction.size()-1)))) {
+            if (!currentBlock.getTransaction().get(pendingTransaction.size()-1).getHash().equals(Transaction.calculateHash(currentBlock.getTransaction().get(pendingTransaction.size()-1),privateKey))) {
                 return false;
             }
 
@@ -70,8 +71,8 @@ public class BlockChain {
         return chain;
     }
 
-    public void miningPendingTransaction(int id, String miningRewardAddress, ArrayList<Transaction> pendingTransaction, String name, Date timestamp) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
-        Transaction rewardTx = new Transaction(id, "REWARD", miningRewardAddress, pendingTransaction.get(pendingTransaction.size()-1).getAmount(), true, name, timestamp);
+    public void miningPendingTransaction(int id, String miningRewardAddress, ArrayList<Transaction> pendingTransaction, String name, Date timestamp, byte[] privateKey) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException, InvalidKeySpecException {
+        Transaction rewardTx = new Transaction(id, "REWARD", miningRewardAddress, pendingTransaction.get(pendingTransaction.size()-1).getAmount(), true, name, timestamp, privateKey, false);
 
         pendingTransaction.add(rewardTx);
 //        signTransaction(pendingTransaction);
@@ -80,7 +81,7 @@ public class BlockChain {
         block.mineBlock(this.difficulty);
         Log.d("johny","Block successfully mined");
         this.chain.add(block);
-        Log.d("johny", "is chain valid? " + this.isChainValidate(pendingTransaction));
+        Log.d("johny", "is chain valid? " + this.isChainValidate(pendingTransaction, privateKey));
        // Log.d("johny", "the chain is " + this.getChain());
     }
 

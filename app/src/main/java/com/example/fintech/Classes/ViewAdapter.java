@@ -89,7 +89,7 @@ public class ViewAdapter extends RecyclerView.Adapter<ViewAdapter.TransactionVie
         private TextView transaction_row_item_LBL_time;
         private Button transaction_row_item_BTN_ming;
         private Button transaction_row_item_BTN_approve;
-
+        private TextView transaction_row_item_LBL_checked;
 
 
         private View rootView;
@@ -105,10 +105,17 @@ public class ViewAdapter extends RecyclerView.Adapter<ViewAdapter.TransactionVie
             transaction_row_item_LBL_time = view.findViewById(R.id.transaction_row_item_LBL_time);
             transaction_row_item_BTN_ming = view.findViewById(R.id.transaction_row_item_BTN_ming);
             transaction_row_item_BTN_approve = view.findViewById(R.id.transaction_row_item_BTN_approve);
+            transaction_row_item_LBL_checked = view.findViewById(R.id.transaction_row_item_LBL_checked);
 
             if (buttonVisible == 0){
                 transaction_row_item_BTN_ming.setVisibility(View.INVISIBLE);
                 transaction_row_item_BTN_approve.setVisibility(View.INVISIBLE);
+                                    transaction_row_item_LBL_checked.setVisibility(View.VISIBLE);
+//
+//                Log.d("activeapprove", transaction.isApprove() + " " + transaction.getActive());
+//                if(transaction.getActive() && transaction.isApprove()){
+////                    transaction_row_item_LBL_checked.setVisibility(View.VISIBLE);
+//                }
             }else if (buttonVisible == 1){
                 transaction_row_item_BTN_ming.setVisibility(View.VISIBLE);
                 transaction_row_item_BTN_approve.setVisibility(View.INVISIBLE);
@@ -140,10 +147,18 @@ public class ViewAdapter extends RecyclerView.Adapter<ViewAdapter.TransactionVie
             });
             view.findViewById(R.id.transaction_row_item_BTN_approve).setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View view) {
                     if (view.getTag().toString().equals("approve")) {
                         Log.d("block", "test 1");
-                        getBlockChain(v, transaction);
+                        try {
+                            getBlockChain(view, transaction);
+                        } catch (SignatureException e) {
+                            e.printStackTrace();
+                        } catch (NoSuchAlgorithmException e) {
+                            e.printStackTrace();
+                        } catch (InvalidKeyException e) {
+                            e.printStackTrace();
+                        }
 
 
                     }
@@ -226,8 +241,19 @@ public class ViewAdapter extends RecyclerView.Adapter<ViewAdapter.TransactionVie
 
     }
 
-    private static void getBlockChain(View view, Transaction transaction) {
+    private static void getBlockChain(View view, Transaction transaction) throws SignatureException, NoSuchAlgorithmException, InvalidKeyException {
         Log.d("block","test");
+//        BlockChain john = new BlockChain();
+//        ArrayList<Block> johnblocks = new ArrayList<>();
+//        Block johnblock = new Block(new Date(System.currentTimeMillis()), "testing", john.getChain().get(0).getPreviousHash(), john.getChain().get(0).getHash());
+//        ArrayList<Transaction> tra = new ArrayList<>();
+//        tra.add(transaction);
+//        Block newBlock = new Block(new Date(System.currentTimeMillis()), tra, john.getChain().get(0).getHash());
+//        johnblocks.add(johnblock);
+//        john.addBlock(newBlock);
+//        Log.d("john blocks ", john.getChain().toString());
+
+
 
         //                    RequestQueue requestQueue = Volley.newRequestQueue(view.getContext());
 //        Login_EDT_username.setText("stas.krot1996@gmail.com");

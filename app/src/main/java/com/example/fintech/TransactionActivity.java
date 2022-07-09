@@ -32,11 +32,16 @@ import org.json.JSONObject;
 
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
+import java.security.KeyFactory;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.SignatureException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -55,9 +60,11 @@ public class TransactionActivity extends AppCompatActivity {
     BlockChain johnstaCoin = new BlockChain();
     ArrayList<Transaction> pendingTransaction = new ArrayList<>();
     HashMap<String, JSONObject> myJson = new HashMap<>();
-
-    private String username = "stas.krot1996@gmail.com";
+    private String username;
     private String role;
+    double balance;
+    byte[] publicKey;
+    byte[] privateKey;
     byte[] encodePublicKey;
     byte[] encodePrivateKey;
 
@@ -65,6 +72,11 @@ public class TransactionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction);
+        role = getIntent().getStringExtra("role");
+        username = getIntent().getStringExtra("username");
+        publicKey = getIntent().getByteArrayExtra("publicKey");
+        privateKey = getIntent().getByteArrayExtra("privateKey");
+        balance = Double.parseDouble(getIntent().getStringExtra("balance"));
         findViews();
         transaction_BTN_create.setOnClickListener(clicked);
         ArrayAdapter<String> typeAdapter = new ArrayAdapter<String>(TransactionActivity.this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.types));
@@ -76,13 +88,7 @@ public class TransactionActivity extends AppCompatActivity {
         contractAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         transaction_SPNR_contractType.setAdapter(contractAdapter);
         transaction_SPNR_contractType.setOnItemSelectedListener(onContextItemSelected);
-//        username = this.getIntent().getStringExtra("username");
-//        role = this.getIntent().getStringExtra("role");
-//        encodePublicKey = this.getIntent().getStringExtra("publicKey").getBytes();
-//        encodePrivateKey = this.getIntent().getStringExtra("privateKey").getBytes();
-//        postRequest();
 
-//
 ////console.log('Blockchain valid?  ' + micaCoin.isChainValidate())
 //
 //        stasCoin.createTransaction(new Transaction("address1", "address2", 100), pendingTransaction);
@@ -133,7 +139,7 @@ public class TransactionActivity extends AppCompatActivity {
                     e.printStackTrace();
                 } catch (InvalidKeyException e) {
                     e.printStackTrace();
-                } catch (SignatureException e) {
+                } catch (SignatureException | InvalidKeySpecException e) {
                     e.printStackTrace();
                 }
             }
@@ -141,30 +147,15 @@ public class TransactionActivity extends AppCompatActivity {
         }
     };
 
-    private void createTransaction() throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
-        if(transaction_SPNR_transType.getSelectedItem().toString().equals("Money")){
+    private void createTransaction() throws NoSuchAlgorithmException, InvalidKeyException, SignatureException, InvalidKeySpecException {
+        if(transaction_SPNR_transType.getSelectedItem().toString().equals("Crypto johnSta")){
             StringBuffer sb = new StringBuffer("Sending ");
             sb.append(transaction_EDT_amount.getText().toString() + " " + "to " + transaction_EDT_address.getText().toString());
-//            String date = new Timestamp(System.currentTimeMillis()+"");
 
-//            @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//            Date timeStamp = null;
-//            try {
-//                timeStamp = sdf.parse(date);
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-//            Log.d("mytransaction", timeStamp + "");
+            johnstaCoin.isChainValidate(pendingTransaction, privateKey);
+            johnstaCoin.createTransaction(new Transaction(username, "yonatani94@gmail.com", Double.parseDouble(transaction_EDT_amount.getText().toString()), false , sb.toString(), new Date(System.currentTimeMillis()),privateKey, false), pendingTransaction);
+            johnstaCoin.miningPendingTransaction(pendingTransaction.get(pendingTransaction.size()-1).getId(),username,pendingTransaction, sb.toString(), new Date(System.currentTimeMillis()), privateKey);
 
-            johnstaCoin.createTransaction(new Transaction(username, "yonatani94@gmail.com", Double.parseDouble(transaction_EDT_amount.getText().toString()), false , sb.toString(), new Date(System.currentTimeMillis())), pendingTransaction);
-            johnstaCoin.miningPendingTransaction(pendingTransaction.get(pendingTransaction.size()-1).getId(),username,pendingTransaction, sb.toString(), new Date(System.currentTimeMillis()));
-            // TODO: 7/6/2022
-            /*****************
-             *
-             * POST UPDATE USER WITH NEW BLOCKCHAIN
-             *
-             *
-             * *****************/
             Log.d("stas", new Date(System.currentTimeMillis()) + "");
 
             Log.d("stas", "address: " + transaction_EDT_address.getText().toString());
@@ -191,7 +182,7 @@ public class TransactionActivity extends AppCompatActivity {
     private AdapterView.OnItemSelectedListener onContextItemSelected = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            if(transaction_SPNR_transType.getSelectedItem().toString().equals("Money")){
+            if(transaction_SPNR_transType.getSelectedItem().toString().equals("Crypto johnSta")){
                 transaction_EDT_address.setVisibility(View.VISIBLE);
                 transaction_EDT_amount.setVisibility(View.VISIBLE);
                 transaction_SPNR_contractType.setVisibility(View.INVISIBLE);

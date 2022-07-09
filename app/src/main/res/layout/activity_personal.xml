@@ -57,65 +57,61 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         >
+
         <TextView
+
             android:id="@+id/personal_LBL_username"
             style="@style/viewParent.headerText.settingsMiniTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/username"
             android:layout_marginLeft="25dp"
-            android:textColor="#8A8787"
-            />
-        <EditText
+            android:text="private Key"
+            android:textColor="#8A8787" />
+
+        <TextView
             android:id="@+id/personal_EDT_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/personal_LBL_username"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:digits="qwertyuiopasdfghjklzxcvbnm1234567890QWERTYUIOPASDFGHJKLZXCVBNM"
-            android:tag="username"
-            />
+            android:tag="username" />
 
         <TextView
             android:id="@+id/personal_LBL_name"
             style="@style/viewParent.headerText.settingsMiniTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/first_name"
-            android:layout_marginLeft="25dp"
-            android:textColor="#8A8787"
             android:layout_below="@id/personal_EDT_username"
-            />
-        <EditText
+            android:layout_marginLeft="25dp"
+            android:text="Public Key"
+            android:textColor="#8A8787" />
+
+        <TextView
             android:id="@+id/personal_EDT_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/personal_LBL_name"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:digits="qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
-            android:tag="first name"
-            />
+            android:tag="first name" />
 
         <TextView
             android:id="@+id/personal_LBL_lastName"
             style="@style/viewParent.headerText.settingsMiniTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/last_name"
-            android:layout_marginLeft="25dp"
-            android:textColor="#8A8787"
             android:layout_below="@id/personal_EDT_name"
-            />
-        <EditText
+            android:layout_marginLeft="25dp"
+            android:text="Balance"
+            android:textColor="#8A8787" />
+        <TextView
             android:id="@+id/personal_EDT_lastName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/personal_LBL_lastName"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:digits="qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
             android:tag="last name"
             />
 
@@ -129,14 +125,13 @@
             android:textColor="#8A8787"
             android:layout_below="@id/personal_EDT_lastName"
             />
-        <EditText
+        <TextView
             android:id="@+id/personal_EDT_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/personal_LBL_email"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:digits="qwertyuiopasdfghjklzxcvbnm1234567890QWERTYUIOPASDFGHJKLZXCVBNM@."
             android:tag="email"
             />
 

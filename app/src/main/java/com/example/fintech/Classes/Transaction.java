@@ -2,6 +2,7 @@ package com.example.fintech.Classes;
 
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
+import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
@@ -9,6 +10,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Date;
 
 public class Transaction {
@@ -21,65 +25,45 @@ public class Transaction {
     private String name;
     private Date timestamp;
     static int counter = 0;
+    boolean approve;
 
 
 
-    public Transaction(String fromAddress,String toAddress,double amount, boolean active, String name, Date timestamp) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+    public Transaction(String fromAddress,String toAddress,double amount, boolean active, String name, Date timestamp, byte[] privateKey, boolean approve) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException, InvalidKeySpecException {
         this.fromAddress = fromAddress;
         this.toAddress = toAddress;
         this.amount = amount;
-        this.hash = calculateHash(this);
+        this.hash = calculateHash(this,privateKey);
         this.id = counter++;
         this.active = active;
         this.name = name;
         this.timestamp = timestamp;
+        this.approve = approve;
     }
 
-    public Transaction(int id, String fromAddress,String toAddress,double amount, boolean active, String name, Date timestamp) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+    public Transaction(int id, String fromAddress,String toAddress,double amount, boolean active, String name, Date timestamp, byte[] privateKey,  boolean approve) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException, InvalidKeySpecException {
         this.fromAddress = fromAddress;
         this.toAddress = toAddress;
         this.amount = amount;
-        this.hash = calculateHash(this);
+        this.hash = calculateHash(this, privateKey);
         this.active = active;
         this.name = name;
         this.timestamp = timestamp;
         this.id = id;
+        this.approve = approve;
     }
 
-    public static String calculateHash(Transaction transaction) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
-
-        // TODO: 7/6/2022
-        /***********
-         *
-         * ADD THE PRIVATE KEY TO SIGN
-         *
-         *
-         * ***********/
-        //Creating KeyPair generator object
-        KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("DSA");
-
-        //Initializing the key pair generator
-        keyPairGen.initialize(2048);
-
-        //Generate the pair of keys
-        KeyPair pair = keyPairGen.generateKeyPair();
-
-        //Getting the private key from the key pair
-        PrivateKey privKey = pair.getPrivate();
-
+    public static String calculateHash(Transaction transaction, byte[] privateKey) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException, InvalidKeySpecException {
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKey);
+        PrivateKey privatek = keyFactory.generatePrivate(privateKeySpec);
         //Creating a Signature object
-        Signature sign = Signature.getInstance("SHA256withDSA");
-
+        Signature sign = Signature.getInstance("SHA256withRSA");
         //Initialize the signature
-        sign.initSign(privKey);
-
-
-
+        sign.initSign(privatek);
         byte[] bytes = transaction.toString().getBytes();
-
         //Adding data to the signature
         sign.update(bytes);
-
         //Calculating the signature
         byte[] signature = sign.sign();
         return bin2hex(signature);
@@ -118,6 +102,10 @@ public class Transaction {
 
     public Date getTimestamp(){ return timestamp;}
 
+    public boolean isApprove() {
+        return approve;
+    }
+
     @Override
     public String toString() {
         return "Transaction{" +
@@ -128,7 +116,7 @@ public class Transaction {
                 ", id=" + id +
                 ", active=" + active +
                 ", name='" + name + '\'' +
-                ", timestamp=" + timestamp +
+                ", timestamp=" + timestamp + ", approve" + approve +
                 '}';
     }
 }

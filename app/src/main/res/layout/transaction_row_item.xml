@@ -37,6 +37,20 @@
                 android:text="Approve" />
 
             <TextView
+                android:id="@+id/transaction_row_item_LBL_checked"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/transaction_row_item_BTN_approve"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="10dp"
+                android:textColor="#4CAF50"
+                android:tag="checked"
+                android:text="APPROVED"
+                android:visibility="invisible"
+                />
+
+            <TextView
                 android:id="@+id/transaction_row_item_LBL_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

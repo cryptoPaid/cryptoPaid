@@ -266,6 +266,7 @@ public class RegisterActivity extends AppCompatActivity {
         X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(bytes);
         PublicKey pk = keyFactory.generatePublic(publicKeySpec);
  ****************************/
+
 //        Block myblock = new Block(new Timestamp(System.currentTimeMillis()), block1, "0");
 //        ArrayList<Block> blockchain =new ArrayList<>();
 //        blockchain.add(myblock);

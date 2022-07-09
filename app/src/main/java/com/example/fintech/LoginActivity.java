@@ -34,6 +34,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -48,9 +50,11 @@ public class LoginActivity extends AppCompatActivity {
     private EditText Login_EDT_password;
     private EditText Login_EDT_username;
     private String email;
-    private String password;
-    byte[] publicKey;
-    byte[] privateKey;
+    private String password = "password";
+    byte[] publicKeybyte;
+    byte[] privateKeybyte;
+    PublicKey publicKey;
+    PrivateKey privateKey;
     Wallet wallet;
 //    private ObjectMapper jackson = new ObjectMapper();
 
@@ -59,6 +63,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         findViews();
+        try {
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+            keyPairGenerator.initialize(1024);
+            KeyPair keyPair = keyPairGenerator.generateKeyPair();
+            privateKey = keyPair.getPrivate();
+            publicKey = keyPair.getPublic();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
         Login_LBL_forgotPass.setOnClickListener(fillData);
         Login_BTN_register.setOnClickListener(fillData);
         Login_BTN_login.setOnClickListener(fillData);
@@ -76,9 +89,13 @@ public class LoginActivity extends AppCompatActivity {
     private void buttonClicked(View view) {
         if (view.getTag().toString().equals("login")) {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.putExtra("role", "role");
+            intent.putExtra("username", "username");
+            intent.putExtra("publicKey", publicKey.getEncoded());
+            intent.putExtra("privateKey", privateKey.getEncoded());
+            intent.putExtra("balance", String.valueOf(100));
             startActivity(intent);
             finish();
-            Log.d("login", "login clicked ");
             loginRequest();
         } else if ((view.getTag().toString().equals("register"))) {
             Intent intent = new Intent(this, RegisterActivity.class);
@@ -107,14 +124,14 @@ public class LoginActivity extends AppCompatActivity {
                         String role = response.getString("role");
                         String username = response.getString("username");
                         String password = response.getString("password");
-//                        if(!checkPasswordValidity(password)){
-//                            Toast.makeText(LoginActivity.this,"Failed to Login",Toast.LENGTH_SHORT).show();
-//                            return;
-//                        }
+                        if(!checkPasswordValidity(password)){
+                            Toast.makeText(LoginActivity.this,"Failed to Login",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         JSONObject jsonWallet = response.getJSONObject("wallet");
                         if (readPublic(jsonWallet.getString("publicKey")) != null && readPrivate(jsonWallet.getString("privateKey")) != null){
-                            publicKey = jsonWallet.getString("publicKey").getBytes();
-                            privateKey = jsonWallet.getString("privateKey").getBytes();
+                            byte[] publicKey = jsonWallet.getString("publicKey").getBytes();
+                            byte[] privateKey = jsonWallet.getString("privateKey").getBytes();
 //                            wallet = new Wallet(privateKey, publicKey, Double.parseDouble(jsonWallet.getString("balance")));
                         } else {
                             Log.d("error", "Cannot read Keys");
@@ -126,7 +143,7 @@ public class LoginActivity extends AppCompatActivity {
                         intent.putExtra("username", username);
                         intent.putExtra("publicKey", publicKey);
                         intent.putExtra("privateKey", privateKey);
-                        intent.putExtra("balance", Double.parseDouble(jsonWallet.getString("balance")));
+                        intent.putExtra("balance", String.valueOf(jsonWallet.getString("balance")));
                         startActivity(intent);
                         finish();
 
@@ -134,25 +151,13 @@ public class LoginActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-
-
-//                        Log.d("ptt",c.toString());
-////                        Intent intent = new Intent(LoginActivity.this, StartUpActivity.class);
-//                        intent.putExtra("EMAIL", c.getEmail());
-//                        intent.putExtra("ROLE", c.getRole());
-//                        Log.d("ptt","role is " + c.getRole());
-//                        intent.putExtra("AVATAR", c.getAvatar());
-//                        intent.putExtra("USERNAME", c.getUsername());
-//                        intent.putExtra("NAME",c.getUsername());
-//                        onLoginSuccess(c, intent);
-//                }
             }
 
             private boolean checkPasswordValidity(String password) {
-                if (password != User.calculateHash(Login_EDT_password.getText().toString())){
-                    return false;
+                if (password.hashCode() == Login_EDT_password.getText().toString().hashCode()){
+                    return true;
                 }
-                return true;
+                return false;
             }
 
             private PublicKey readPublic(String publicKey) {
@@ -201,33 +206,11 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+
+
     private void onLoginFailed() {
         Toast.makeText(getBaseContext(), "Failed to Login" , Toast.LENGTH_LONG).show();
     }
-
-
-
-//    // use Jackson to convert JSON to Object
-//    private <T> T unmarshal(String json, Class<T> type) {
-//        try {
-//            //jackson.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-//            //System.out.println("in unmarshal " + json.toString());
-//            return this.jackson.readValue(json, type);
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    private String marshal(Object moreDetails) {
-//        try {
-//            //jackson.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-//            //System.out.println("in marshal " + moreDetails.toString());
-//            return this.jackson.writeValueAsString(moreDetails.toString());
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
 
     boolean isEmail(EditText text) {
         CharSequence email = text.getText().toString();

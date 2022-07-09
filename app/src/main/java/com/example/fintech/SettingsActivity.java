@@ -25,8 +25,10 @@ public class SettingsActivity extends AppCompatActivity {
     private TextView settings_LBL_changePass;
     private TextView settings_LBL_editProfile;
     private ImageView settings_IMG_edit;
-
-
+    byte[] publicKey;
+    byte[] privateKey;
+    String username;
+    String balance;
 
 
     @Override
@@ -37,6 +39,10 @@ public class SettingsActivity extends AppCompatActivity {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
         setContentView(R.layout.activity_settings);
+        username = getIntent().getStringExtra("username");
+        publicKey = getIntent().getByteArrayExtra("publicKey");
+        privateKey = getIntent().getByteArrayExtra("privateKey");
+        balance = getIntent().getStringExtra("balance");
         findViews();
         //function for enabling dark mode
         setDarkModeSwitch();
@@ -58,6 +64,10 @@ public class SettingsActivity extends AppCompatActivity {
                 showOwnersDialog();
             }else if (view.getTag().toString().equals("editProfile")) {
                 Intent intent = new Intent(SettingsActivity.this,PersonalActivity.class);
+                intent.putExtra("username", "username");
+                intent.putExtra("publicKey", publicKey);
+                intent.putExtra("privateKey", privateKey);
+                intent.putExtra("balance", balance);
                 startActivity(intent);
             }
         }
