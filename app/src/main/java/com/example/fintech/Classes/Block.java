@@ -20,15 +20,23 @@ public class Block {
     private int nonce = 0;
     private ArrayList<Transaction> transaction = new ArrayList<>();
 
-    public Block(Timestamp timestamp, String data, String previousHash) {
+    public Block(Date timestamp, String data, String previousHash) {
         this.timestamp = timestamp;
         this.data = data;
         this.previousHash = previousHash;
         this.hash = calculateHash(this);
 
     }
+    public Block(Date timestamp, String data, String previousHash, String hash) {
+        this.timestamp = timestamp;
+        this.data = data;
+        this.previousHash = previousHash;
+        this.hash = hash;
 
-    public Block(Timestamp timestamp, ArrayList<Transaction> transaction, String previousHash) {
+    }
+
+
+    public Block(Date timestamp, ArrayList<Transaction> transaction, String previousHash) {
         this.timestamp = timestamp;
         this.transaction = transaction;
         this.previousHash = previousHash;

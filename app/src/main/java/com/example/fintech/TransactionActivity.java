@@ -95,7 +95,7 @@ public class TransactionActivity extends AppCompatActivity {
 //
 //        pendingTransaction = new ArrayList<>();
 //        stasCoin.createTransaction(new Transaction("Bob", "address1", 50), pendingTransaction);
-//        stasCoin.miningPendingTransaction("Bob", pendingTransaction);add
+//        stasCoin.miningPendingTransaction("Bob", pendingTransaction);
 //        Log.d("johny", "Balance of Bob: "+ stasCoin.getBalanceOfAddress("Bob"));
 
 
@@ -156,8 +156,8 @@ public class TransactionActivity extends AppCompatActivity {
 //            }
 //            Log.d("mytransaction", timeStamp + "");
 
-            johnstaCoin.createTransaction(new Transaction(username, "yonatani94@gmail.com", 10, false , sb.toString(), new Date(System.currentTimeMillis())), pendingTransaction);
-            johnstaCoin.miningPendingTransaction(username,pendingTransaction, sb.toString(), new Date(System.currentTimeMillis()));
+            johnstaCoin.createTransaction(new Transaction(username, "yonatani94@gmail.com", Double.parseDouble(transaction_EDT_amount.getText().toString()), false , sb.toString(), new Date(System.currentTimeMillis())), pendingTransaction);
+            johnstaCoin.miningPendingTransaction(pendingTransaction.get(pendingTransaction.size()-1).getId(),username,pendingTransaction, sb.toString(), new Date(System.currentTimeMillis()));
             // TODO: 7/6/2022
             /*****************
              *
@@ -229,7 +229,7 @@ public class TransactionActivity extends AppCompatActivity {
     ////////// TEST FOR USER API ///////////////
     private void postTransaction() {
 
-        String url = "http://192.168.1.223:8050/blockchain/items/2021b.johny.stas/" + username;
+        String url = "http://10.0.0.4:8050/blockchain/items/2021b.johny.stas/" + username;
         JSONObject js = new JSONObject();
         JSONObject itemIdJs = new JSONObject();
 //        JSONArray tranJS = new JSONArray();
@@ -242,12 +242,16 @@ public class TransactionActivity extends AppCompatActivity {
                 js.put("itemId", itemIdJs);
                 js.put("type","transaction");
                 js.put("name", pendingTransaction.get(pendingTransaction.size()-1).getName());
-                js.put("active",pendingTransaction.get(pendingTransaction.size()-1).getActive());
+                js.put("active",false);
                 js.put("approve", false);
                 js.put("amount",pendingTransaction.get(pendingTransaction.size()-1).getAmount());
-                js.put("toAddress",pendingTransaction.get(pendingTransaction.size()-1).getToAddress());
-                js.put("fromAddress",pendingTransaction.get(pendingTransaction.size()-1).getFromAddress());
-                js.put("createdTimestamp", pendingTransaction.get(pendingTransaction.size()-1).getTimestamp());
+//                js.put("toAddress",pendingTransaction.get(pendingTransaction.size()-1).getToAddress());
+//                js.put("fromAddress",pendingTransaction.get(pendingTransaction.size()-1).getFromAddress());                js.put("toAddress",pendingTransaction.get(pendingTransaction.size()-1).getToAddress());
+                js.put("fromAddress","stas.krot1996@gmail.com");
+                js.put("toAddress","yonatani94@gmail.com");
+
+            js.put("createdTimestamp", pendingTransaction.get(pendingTransaction.size()-1).getTimestamp());
+
                 js.put("hash",pendingTransaction.get(pendingTransaction.size()-1).getHash());
 //                tranJS.put(transactionJs);
 //            }

@@ -273,7 +273,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         //User user = new User("stas.krot1996@gmail.com", "MANAGER", "Demo User","451451dvd");
         //UserId userId = new UserId("2021b.johny.stas","stas.krot1996@gmail.com");
-        String url = "http://192.168.1.223:8050/blockchain/users/";
+        String url = "http://10.0.0.4:8050/blockchain/users/";
         JSONObject js = new JSONObject();
         JSONObject walletJs = new JSONObject();
         JSONObject blockjs = new JSONObject();

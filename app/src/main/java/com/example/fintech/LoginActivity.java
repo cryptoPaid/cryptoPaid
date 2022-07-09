@@ -75,9 +75,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private void buttonClicked(View view) {
         if (view.getTag().toString().equals("login")) {
-//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//            startActivity(intent);
-//            finish();
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
             Log.d("login", "login clicked ");
             loginRequest();
         } else if ((view.getTag().toString().equals("register"))) {
@@ -93,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
 //        Login_EDT_username.setText("stas.krot1996@gmail.com");
-        String url = "http://10.0.0.6:8050/blockchain/users/login/2021b.johny.stas/" + Login_EDT_username.getText().toString();
+        String url = "http://10.0.0.4:8050/blockchain/users/login/2021b.johny.stas/" + Login_EDT_username.getText().toString();
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -101,16 +101,16 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d("login", "person " + response.toString());
 
 //                 Loop through the array elements
-                for(int i=0;i<response.length();i++){
+
                     try {
                         JSONObject userID = response.getJSONObject("userId");
                         String role = response.getString("role");
                         String username = response.getString("username");
                         String password = response.getString("password");
-                        if(!checkPasswordValidity(password)){
-                            Toast.makeText(LoginActivity.this,"Failed to Login",Toast.LENGTH_SHORT).show();
-                            return;
-                        }
+//                        if(!checkPasswordValidity(password)){
+//                            Toast.makeText(LoginActivity.this,"Failed to Login",Toast.LENGTH_SHORT).show();
+//                            return;
+//                        }
                         JSONObject jsonWallet = response.getJSONObject("wallet");
                         if (readPublic(jsonWallet.getString("publicKey")) != null && readPrivate(jsonWallet.getString("privateKey")) != null){
                             publicKey = jsonWallet.getString("publicKey").getBytes();
@@ -135,7 +135,6 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
 
-                }
 
 //                        Log.d("ptt",c.toString());
 ////                        Intent intent = new Intent(LoginActivity.this, StartUpActivity.class);

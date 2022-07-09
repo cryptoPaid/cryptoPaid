@@ -24,6 +24,13 @@ public class BlockChain {
     private int difficulty;
    // private ArrayList<Transaction> pendingTransaction = new ArrayList<>();
 
+    public BlockChain(ArrayList<Block> chain){
+        this.chain = chain;
+        this.difficulty = 2;
+        this.miningReward = 100;
+    }
+
+
     public BlockChain(){
         this.chain.add(createGenesisBlock());
         this.difficulty = 2;
@@ -31,7 +38,7 @@ public class BlockChain {
     }
 
     private Block createGenesisBlock() {
-        return new Block(new Timestamp(System.currentTimeMillis()), "Genesis block", "0");
+        return new Block(new Date(System.currentTimeMillis()), "Genesis block", "0");
     }
 
     private Block getLatestBlock() {
@@ -63,8 +70,8 @@ public class BlockChain {
         return chain;
     }
 
-    public void miningPendingTransaction(String miningRewardAddress, ArrayList<Transaction> pendingTransaction, String name, Date timestamp) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
-        Transaction rewardTx = new Transaction("REWARD", miningRewardAddress, this.miningReward, true, name, timestamp);
+    public void miningPendingTransaction(int id, String miningRewardAddress, ArrayList<Transaction> pendingTransaction, String name, Date timestamp) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+        Transaction rewardTx = new Transaction(id, "REWARD", miningRewardAddress, pendingTransaction.get(pendingTransaction.size()-1).getAmount(), true, name, timestamp);
 
         pendingTransaction.add(rewardTx);
 //        signTransaction(pendingTransaction);
@@ -138,5 +145,14 @@ public class BlockChain {
 
     public int getDifficulty() {
         return difficulty;
+    }
+
+    @Override
+    public String toString() {
+        return "BlockChain{" +
+                "chain=" + chain +
+                ", miningReward=" + miningReward +
+                ", difficulty=" + difficulty +
+                '}';
     }
 }

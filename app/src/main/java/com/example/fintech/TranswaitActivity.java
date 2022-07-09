@@ -65,6 +65,7 @@ public class TranswaitActivity extends AppCompatActivity {
 //    private TableView transwait_TBL_table;
     private Button transwait_BTN_waiting;
     private Button transwait_BTN_show;
+    private Button transwait_BTN_approve;
 
     private ArrayList<Transaction> pendingTransaction = new ArrayList<>();
     private LinearLayoutManager linearLayoutManager;
@@ -82,6 +83,7 @@ public class TranswaitActivity extends AppCompatActivity {
         transwait_BTN_waiting.setVisibility(View.VISIBLE);
         transwait_BTN_show.setOnClickListener(clicked);
         transwait_BTN_waiting.setOnClickListener(clicked);
+        transwait_BTN_approve.setOnClickListener(clicked);
 
     }
 
@@ -96,6 +98,7 @@ public class TranswaitActivity extends AppCompatActivity {
                     transwait_BTN_waiting.setVisibility(View.INVISIBLE);
                     transwait_BTN_show.setVisibility(View.INVISIBLE);
 
+
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 } catch (InvalidKeyException e) {
@@ -109,6 +112,19 @@ public class TranswaitActivity extends AppCompatActivity {
                     transwait_BTN_waiting.setVisibility(View.INVISIBLE);
                     transwait_BTN_show.setVisibility(View.INVISIBLE);
                     showTransactions("active");
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (InvalidKeyException e) {
+                    e.printStackTrace();
+                } catch (SignatureException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if(v.getTag().toString().equals("approve")){
+                try {
+                    transwait_BTN_waiting.setVisibility(View.INVISIBLE);
+                    transwait_BTN_show.setVisibility(View.INVISIBLE);
+                    showTransactions("approve");
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 } catch (InvalidKeyException e) {
@@ -138,17 +154,12 @@ public class TranswaitActivity extends AppCompatActivity {
 //        }
         getTransactions(option);
 
+
     }
 
 
     private void getTransactions(String option) {
-        if (option.equals("active")){
-            Log.d("pttt", option);
-            initAdapter(0);
-        } else if (option.equals("noactive")){
-            Log.d("pttt", option);
-            initAdapter(1);
-        }
+
         RequestQueue requestQueue = Volley.newRequestQueue(TranswaitActivity.this);
         String url = "http://10.0.0.4:8050/blockchain/items/2021b.johny.stas/stas.krot1996@gmail.com/"+option;
 
@@ -156,24 +167,21 @@ public class TranswaitActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONArray response) {
                 Log.d("waitstas","JSON " + response.toString());
-                for (int i=0; i < response.length()-1; i++)
+                for (int i=0; i < response.length(); i++)
                 {
                     try {
-
-
-
-
                         JSONObject transaction = response.getJSONObject(i);
                         String from = transaction.getString("fromAddress");
                         String to = transaction.getString("toAddress");
                         Double amount = transaction.getDouble("amount");
                         Boolean active = transaction.getBoolean("active");
                         String name = transaction.getString("name");
-                        String type = transaction.getString("type");
-                        String timestamp = transaction.getString("timestamp");
-                        Date date = convetTime(timestamp);
+                        String timestamp = transaction.getString("createdTimestamp");
+                        JSONObject item = transaction.getJSONObject("itemId");
+                        int id = item.getInt("id");
+                   //     Date date = convetTime(timestamp);
 
-                        Transaction tr = new Transaction(from,to,amount, active,name,date);
+                        Transaction tr = new Transaction(id,from,to,amount, active,name,new Date(System.currentTimeMillis()));
                         pendingTransaction.add(tr);
 
 
@@ -188,6 +196,16 @@ public class TranswaitActivity extends AppCompatActivity {
                     }
 
 
+                }
+                Log.d("stas", "sizeing " + pendingTransaction.size());
+                if (option.equals("active")){
+                    Log.d("pttt", option);
+                    initAdapter(0);
+                } else if (option.equals("noactive")){
+                    Log.d("pttt", option);
+                    initAdapter(1);
+                } else if (option.equals("approve")){
+                    initAdapter(2);
                 }
 
 
@@ -221,6 +239,7 @@ public class TranswaitActivity extends AppCompatActivity {
         transwait_BTN_show = findViewById(R.id.transwait_BTN_show);
         transwait_BTN_waiting = findViewById(R.id.transwait_BTN_waiting);
         traswait_LST_listView = findViewById(R.id.traswait_LST_listView);
+        transwait_BTN_approve = findViewById(R.id.transwait_BTN_approve);
         traswait_LST_listView.setHasFixedSize(true);
 
     }

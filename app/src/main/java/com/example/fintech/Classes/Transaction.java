@@ -35,6 +35,17 @@ public class Transaction {
         this.timestamp = timestamp;
     }
 
+    public Transaction(int id, String fromAddress,String toAddress,double amount, boolean active, String name, Date timestamp) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+        this.fromAddress = fromAddress;
+        this.toAddress = toAddress;
+        this.amount = amount;
+        this.hash = calculateHash(this);
+        this.active = active;
+        this.name = name;
+        this.timestamp = timestamp;
+        this.id = id;
+    }
+
     public static String calculateHash(Transaction transaction) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
 
         // TODO: 7/6/2022

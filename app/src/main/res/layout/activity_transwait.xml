@@ -51,6 +51,21 @@
 
     </Button>
 
+    <Button
+        android:id="@+id/transwait_BTN_approve"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="approve"
+        android:tag="approve"
+        android:layout_centerInParent="true"
+        android:visibility="visible"
+        android:layout_below="@id/transwait_BTN_waiting"
+        android:layout_marginTop="15dp"
+        >
+
+
+    </Button>
+
 
 
 </RelativeLayout>
