@@ -307,6 +307,7 @@ public class RegisterActivity extends AppCompatActivity {
 //
             blockChainJs.put("miningReward", user.getJohnstaCoin().getMiningReward());
             blockChainJs.put("difficulty", user.getJohnstaCoin().getDifficulty());
+
 ////            blockChainJs.put("list1", blockjs);
             blockChainJs.put("chain", blocks);
             js.put("johnStaCoin", blockChainJs.toString());

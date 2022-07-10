@@ -45,6 +45,7 @@ import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
     private TextView Login_LBL_forgotPass;
+    private TextView Login_LBL_title;
     private Button Login_BTN_register;
     private Button Login_BTN_login;
     private EditText Login_EDT_password;
@@ -144,6 +145,7 @@ public class LoginActivity extends AppCompatActivity {
                         intent.putExtra("publicKey", publicKey);
                         intent.putExtra("privateKey", privateKey);
                         intent.putExtra("balance", String.valueOf(jsonWallet.getString("balance")));
+
                         startActivity(intent);
                         finish();
 
@@ -223,5 +225,6 @@ public class LoginActivity extends AppCompatActivity {
         Login_BTN_login = findViewById(R.id.Login_BTN_login);
         Login_EDT_password = findViewById(R.id.Login_EDT_password);
         Login_EDT_username = findViewById(R.id.Login_EDT_username);
+        Login_LBL_title = findViewById(R.id.Login_LBL_title);
     }
 }

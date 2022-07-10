@@ -19,10 +19,9 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout main_LAY_Settings;
     private String username;
     private String role;
-    double balance;
-
-    byte[] publicKey;
-    byte[] privateKey;
+    private double balance;
+    private byte[] publicKey;
+    private byte[] privateKey;
 
 
     @Override
@@ -34,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         publicKey = getIntent().getByteArrayExtra("publicKey");
         privateKey = getIntent().getByteArrayExtra("privateKey");
         balance = Double.parseDouble(getIntent().getStringExtra("balance"));
-
         findViews();
         main_LAY_Qtransaction.setOnClickListener(changeActivity);
         main_LAY_create.setOnClickListener(changeActivity);

@@ -78,6 +78,7 @@ public class BlockChain {
 //        signTransaction(pendingTransaction);
 
         Block block = new Block(new Timestamp(System.currentTimeMillis()), pendingTransaction, this.getLatestBlock().getHash());
+
         block.mineBlock(this.difficulty);
         Log.d("johny","Block successfully mined");
         this.chain.add(block);
@@ -146,6 +147,14 @@ public class BlockChain {
 
     public int getDifficulty() {
         return difficulty;
+    }
+
+    public void setMiningReward(int miningReward) {
+        this.miningReward = miningReward;
+    }
+
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
     }
 
     @Override

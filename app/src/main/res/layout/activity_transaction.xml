@@ -72,5 +72,25 @@
         android:visibility="invisible" />
 
 
+    <Spinner
+        android:id="@+id/transaction_SPNR_difficulty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/transaction_EDT_amount"
+        android:layout_marginTop="25dp"
+        android:autofillHints="Mining Difficulty"
+        />
+
+        <Spinner
+        android:id="@+id/transaction_SPNR_reward"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/transaction_SPNR_difficulty"
+        android:layout_marginTop="25dp"
+        android:autofillHints="Mining Reward"
+        />
+
+
+
 
 </RelativeLayout>

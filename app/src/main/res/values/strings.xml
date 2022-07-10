@@ -31,4 +31,21 @@
         <item>Smart Contract</item>
     </string-array>
 
+    <string-array name="difficulty">
+        <item>Select Difficulty</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <string-array name="reward">
+        <item>Select Reward</item>
+        <item>10</item>
+        <item>200</item>
+        <item>300</item>
+        <item>400</item>
+    </string-array>
+
 </resources>

@@ -6,13 +6,27 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
 
+    <TextView
+        android:id="@+id/Login_LBL_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome to CryptoPaid"
+        android:layout_centerHorizontal="true"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        android:textColor="#3F51B5"
+        android:layout_marginTop="40dp"
+        />
+
+
     <EditText
         android:id="@+id/Login_EDT_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Username"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="35dp"
+        android:layout_below="@id/Login_LBL_title"
         />
 
     <EditText

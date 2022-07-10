@@ -57,6 +57,8 @@ public class TransactionActivity extends AppCompatActivity {
     private Spinner transaction_SPNR_contractType;
     private EditText transaction_EDT_address;
     private EditText transaction_EDT_amount;
+    private Spinner transaction_SPNR_difficulty;
+    private Spinner transaction_SPNR_reward;
     BlockChain johnstaCoin = new BlockChain();
     ArrayList<Transaction> pendingTransaction = new ArrayList<>();
     HashMap<String, JSONObject> myJson = new HashMap<>();
@@ -79,6 +81,7 @@ public class TransactionActivity extends AppCompatActivity {
         balance = Double.parseDouble(getIntent().getStringExtra("balance"));
         findViews();
         transaction_BTN_create.setOnClickListener(clicked);
+
         ArrayAdapter<String> typeAdapter = new ArrayAdapter<String>(TransactionActivity.this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.types));
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         transaction_SPNR_transType.setAdapter(typeAdapter);
@@ -89,44 +92,16 @@ public class TransactionActivity extends AppCompatActivity {
         transaction_SPNR_contractType.setAdapter(contractAdapter);
         transaction_SPNR_contractType.setOnItemSelectedListener(onContextItemSelected);
 
-////console.log('Blockchain valid?  ' + micaCoin.isChainValidate())
-//
-//        stasCoin.createTransaction(new Transaction("address1", "address2", 100), pendingTransaction);
-//        stasCoin.createTransaction(new Transaction("address2", "address1", 50), pendingTransaction);
-//
-////console.log('Blockchain valid?  ' + micaCoin.isChainValidate())
-//        Log.d("johny","Starting the miner");
-//        stasCoin.miningPendingTransaction("Bob", pendingTransaction);
-//        Log.d("johny", "Balance of Bob: "+ stasCoin.getBalanceOfAddress("Bob"));
-//
-//        pendingTransaction = new ArrayList<>();
-//        stasCoin.createTransaction(new Transaction("Bob", "address1", 50), pendingTransaction);
-//        stasCoin.miningPendingTransaction("Bob", pendingTransaction);
-//        Log.d("johny", "Balance of Bob: "+ stasCoin.getBalanceOfAddress("Bob"));
+        ArrayAdapter<String> difficultyAdapter = new ArrayAdapter<String>(TransactionActivity.this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.difficulty));
+        difficultyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        transaction_SPNR_difficulty.setAdapter(difficultyAdapter);
+        transaction_SPNR_difficulty.setOnItemSelectedListener(onContextItemSelected);
 
+        ArrayAdapter<String> rewardAdapter = new ArrayAdapter<String>(TransactionActivity.this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.reward));
+        rewardAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        transaction_SPNR_reward.setAdapter(rewardAdapter);
+        transaction_SPNR_reward.setOnItemSelectedListener(onContextItemSelected);
 
-//
-//        ArrayList<JSONObject> blockArr = new ArrayList<>();
-//        JSONObject blockchain = new JSONObject();
-//
-//        for (int i = 0; i < stasCoin.getChain().size(); i++) {
-//            try {
-//                JSONObject block = new JSONObject();
-////                block.put("index", stasCoin.getChain().get(i).getIndex());
-//                block.put("previousHash", stasCoin.getChain().get(i).getPreviousHash());
-//                block.put("timestamp", stasCoin.getChain().get(i).getTimestamp());
-//                block.put("data", stasCoin.getChain().get(i).getData());
-//                block.put("hash", stasCoin.getChain().get(i).getHash());
-//                blockArr.add(block);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        try {
-//            blockchain.put("chain", blockArr);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
     }
 
     private View.OnClickListener clicked = new View.OnClickListener() {
@@ -148,9 +123,17 @@ public class TransactionActivity extends AppCompatActivity {
     };
 
     private void createTransaction() throws NoSuchAlgorithmException, InvalidKeyException, SignatureException, InvalidKeySpecException {
+        transaction_SPNR_reward.getSelectedItem().toString();
         if(transaction_SPNR_transType.getSelectedItem().toString().equals("Crypto johnSta")){
             StringBuffer sb = new StringBuffer("Sending ");
             sb.append(transaction_EDT_amount.getText().toString() + " " + "to " + transaction_EDT_address.getText().toString());
+
+            if (!transaction_SPNR_difficulty.getSelectedItem().toString().equals("Select Difficulty")){
+                johnstaCoin.setDifficulty(Integer.parseInt(transaction_SPNR_difficulty.getSelectedItem().toString()));
+            }
+            if (!transaction_SPNR_reward.getSelectedItem().toString().equals("Select Reward")){
+                johnstaCoin.setMiningReward(Integer.parseInt(transaction_SPNR_reward.getTransitionName().toString()));
+            }
 
             johnstaCoin.isChainValidate(pendingTransaction, privateKey);
             johnstaCoin.createTransaction(new Transaction(username, "yonatani94@gmail.com", Double.parseDouble(transaction_EDT_amount.getText().toString()), false , sb.toString(), new Date(System.currentTimeMillis()),privateKey, false), pendingTransaction);
@@ -190,6 +173,10 @@ public class TransactionActivity extends AppCompatActivity {
                 transaction_SPNR_contractType.setVisibility(View.VISIBLE);
                 transaction_EDT_address.setVisibility(View.INVISIBLE);
                 transaction_EDT_amount.setVisibility(View.INVISIBLE);
+            }else if(transaction_SPNR_difficulty.getSelectedItem().toString().equals("difficulty")){
+
+            }else if (transaction_SPNR_reward.getSelectedItem().toString().equals("reward")){
+
             }
         }
 
@@ -206,6 +193,9 @@ public class TransactionActivity extends AppCompatActivity {
         transaction_SPNR_contractType = findViewById(R.id.transaction_SPNR_contractType);
         transaction_EDT_address = findViewById(R.id.transaction_EDT_address);
         transaction_EDT_amount = findViewById(R.id.transaction_EDT_amount);
+        transaction_SPNR_difficulty = findViewById(R.id.transaction_SPNR_difficulty);
+        transaction_SPNR_reward = findViewById(R.id.transaction_SPNR_reward);
+
     }
 
     private void send(String s) {
